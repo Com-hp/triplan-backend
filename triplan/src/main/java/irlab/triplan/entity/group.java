@@ -12,19 +12,19 @@ public class group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
-    private Integer id;
+    private Integer group_id;
 
     @Column(name = "group_name")
-    private String name;
+    private String group_name;
 
     @Column(name = "group_code")
-    private String code;
+    private String group_code;
 
     @Column(name = "group_pw")
-    private String pw;
+    private String group_pw;
 
     @Column(name = "group_path")
-    private String path;
+    private String group_path;
 
 }
 

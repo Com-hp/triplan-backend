@@ -1,5 +1,6 @@
 package irlab.triplan.DTO;
 
+import irlab.triplan.entity.group;
 import irlab.triplan.entity.trip;
 import lombok.*;
 
@@ -16,5 +17,8 @@ public class groupDTO {
     private String group_code;
     private String group_pw;
     private String group_path;
-    private List<trip> trip_id;
+
+    public static groupDTO toDto(group g) {
+        return new groupDTO(g.getGroup_id(), g.getGroup_name(), g.getGroup_code(), g.getGroup_pw(), g.getGroup_path());
+    }
 }

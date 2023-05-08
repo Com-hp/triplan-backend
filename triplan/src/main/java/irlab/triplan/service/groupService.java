@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface groupService {
     List<group> readGroup();
-    List<groupDTO> getGroup(Integer userId);
+    List<groupDTO> getGroup(Integer user_id);
 }

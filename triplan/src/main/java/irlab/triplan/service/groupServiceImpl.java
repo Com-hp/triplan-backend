@@ -19,8 +19,8 @@ public class groupServiceImpl implements groupService{
     }
 
     @Override
-    public List<groupDTO> getGroup(Integer userId){
-        List<group> g = grouprepository.findByGroup(userId);
+    public List<groupDTO> getGroup(Integer user_id){
+        List<group> g = grouprepository.findByGroup(user_id);
         List<groupDTO> gd = new ArrayList<>();
         g.forEach(s -> gd.add(groupDTO.toDto(s)));
         return gd;

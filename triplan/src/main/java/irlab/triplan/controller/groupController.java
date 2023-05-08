@@ -22,7 +22,7 @@ public class groupController {
     }
 
     @GetMapping("")
-    public List<groupDTO> getGroup(@RequestParam(name="userId") Integer userId){
-        return groupservice.getGroup(userId);
+    public List<groupDTO> getGroup(@RequestParam(name="user_id") Integer user_id){
+        return groupservice.getGroup(user_id);
     }
 }

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface groupReporitory extends JpaRepository<group, Integer> {
-    @Query(nativeQuery = true, value = "select g.group_id, g.group_name, g.group_code, g.group_pw, g.group_path from `group` g where g.group_id in (select gu.group_id from groupUser gu where gu.user_id = :userId);")
-    List<group> findByGroup(Integer userId);
+    @Query(nativeQuery = true, value = "select g.group_id, g.group_name, g.group_code, g.group_pw, g.group_path from `group` g where g.group_id in (select gu.group_id from groupUser gu where gu.user_id = :user_id);")
+    List<group> findByGroup(Integer user_id);
 }

@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class tripDTO {
-    private Integer t_id;
-    private String t_name;
-    private String t_path;
-    private LocalDate s_date;
-    private LocalDate e_date;
+    private Integer trip_id;
+    private String trip_name;
+    private String trip_path;
+    private LocalDate start_date;
+    private LocalDate end_date;
 
     public static tripDTO toDto(trip t){
         return new tripDTO(t.getT_id(),t.getT_name(), t.getT_path(), t.getS_date(), t.getE_date());

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface tripRepository extends JpaRepository<trip, Integer> {
-    @Query(value = "select t from trip t where t.tGroup.id = :id")
-    List<trip> findGroupInTrip(Integer id);
+    @Query(value = "select t from trip t where t.tGroup.group_id = :groupId")
+    List<trip> findGroupInTrip(Integer groupId);
 }

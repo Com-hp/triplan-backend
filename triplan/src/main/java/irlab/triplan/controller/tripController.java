@@ -17,8 +17,8 @@ import java.util.List;
 public class tripController {
     private final tripService tripservice;
 
-    @GetMapping("/home/{id}")
-    public List<tripDTO> getGroupInTrip(@PathVariable Integer id){
-        return tripservice.getGroupInTrip(id);
+    @GetMapping("/home")
+    public List<tripDTO> getGroupInTrip(@RequestParam(name="groupId") Integer groupId){
+        return tripservice.getGroupInTrip(groupId);
     }
 }

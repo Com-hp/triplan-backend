@@ -15,8 +15,8 @@ public class tripServiceImpl implements tripService{
     private final tripRepository triprepository;
 
     @Override
-    public List<tripDTO> getGroupInTrip(Integer groupId){
-        List<trip> t = triprepository.findGroupInTrip(groupId);
+    public List<tripDTO> getGroupInTrip(Integer group_id){
+        List<trip> t = triprepository.findGroupInTrip(group_id);
         List<tripDTO> td = new ArrayList<>();
         t.forEach(s -> td.add(tripDTO.toDto(s)));
         return td;

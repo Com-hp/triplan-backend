@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -20,6 +21,12 @@ import java.util.List;
 public class tripController {
     private final tripService tripservice;
     private final groupService groupservice;
+
+    @GetMapping("")
+    public List<tripDTO> getTrip(@RequestParam(name = "group_id")Integer group_id){
+        List<tripDTO> td = tripservice.getGroupInTrip(group_id);
+        return td;
+    }
 
     @GetMapping("/home")
     public List getGroupInTrip(@RequestParam(name="user_id") Integer user_id){

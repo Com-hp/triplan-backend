@@ -4,5 +4,5 @@ import irlab.triplan.DTO.tripDTO;
 import java.util.List;
 
 public interface tripService {
-    List<tripDTO> getGroupInTrip(Integer groupId);
+    List<tripDTO> getGroupInTrip(Integer group_id);
 }

@@ -1,5 +1,6 @@
 package irlab.triplan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class user {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "default_id")
+    @JsonIgnore
     private userDefault default_id;
 
     @Column(name = "user_name")

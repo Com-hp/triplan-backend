@@ -25,7 +25,7 @@ public class userDTO {
         Map<String, Object> r = new HashMap<>();
         r.put("user_id",u.getUid());
         r.put("user_name", u.getUser_name());
-        r.put("default", ud);
+        r.put("default_id", ud.getDefalut_id());
         return r;
     }
 }

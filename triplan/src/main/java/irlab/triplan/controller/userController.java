@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RestController
@@ -18,8 +19,9 @@ import java.util.Map;
 public class userController {
     private final userService userservice;
     @PostMapping("/login")
-    public Map<String, Object> CreateUser(String user_name, String access_token, Integer default_id){
-        userservice.CreateUser(user_name, access_token, default_id);
+    public Map<String, Object> CreateUser(@RequestBody Map<String, Object> req){
+        System.out.println(req);
+        userservice.CreateUser((String) req.get("user_name"), (String) req.get("access_token"), (Integer) req.get("default_id"));
         Map<String, Object> res = new HashMap<>();
         res.put("Message", "성공");
         return res;
@@ -34,7 +36,6 @@ public class userController {
             res.put("Message", "is_new");
         }
         else{
-            System.out.println("test");
             res = userservice.findByAccessToken(access_token);
         }
         return res;

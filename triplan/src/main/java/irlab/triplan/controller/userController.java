@@ -20,7 +20,6 @@ public class userController {
     private final userService userservice;
     @PostMapping("/login")
     public Map<String, Object> CreateUser(@RequestBody Map<String, Object> req){
-        System.out.println(req);
         userservice.CreateUser((String) req.get("user_name"), (String) req.get("access_token"), (Integer) req.get("default_id"));
         Map<String, Object> res = new HashMap<>();
         res.put("Message", "성공");

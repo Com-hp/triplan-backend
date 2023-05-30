@@ -21,17 +21,14 @@ public class memo {
     private Integer classification_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name = "trip_id")
     private trip cTrip;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name = "category_id")
     private category cCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name = "user_id")
     private user cUser;
 

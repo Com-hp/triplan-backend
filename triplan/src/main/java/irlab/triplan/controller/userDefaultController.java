@@ -4,6 +4,7 @@ import irlab.triplan.DTO.userDefaultDTO;
 import irlab.triplan.service.userDefaultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,8 @@ import java.util.List;
 @RequestMapping("/image")
 public class userDefaultController {
     private final userDefaultService userDefaultService;
+
+    @PostMapping("")
     public List<userDefaultDTO> getDefaultImage(){
         return userDefaultService.getDefaultImage();
     }

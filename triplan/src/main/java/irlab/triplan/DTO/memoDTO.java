@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class memoDTO {
     private Integer classification_id;
-    private trip cTrip;
-    private category cCategory;
-    private user cUser;
+    private Integer Trip_id;
+    private Integer cCategory;
+    private String classification;
+    private Integer user_id;
+    private String User_name;
     private String content;
     private String image_path;
     private LocalDateTime content_datetime;
@@ -25,6 +27,7 @@ public class memoDTO {
     private Integer like_count;
 
     public static memoDTO toDto(memo m){
-        return new memoDTO(m.getClassification_id(), m.getCTrip(), m.getCCategory(), m.getCUser(), m.getContent(), m.getImage_path(), m.getContent_datetime(), m.getIs_url(), m.getLike_count());
+        return new memoDTO(m.getClassification_id(), m.getCTrip().getT_id(), m.getCCategory().getCategory_id(), m.getCCategory().getClassification(),
+                m.getCUser().getUid(), m.getCUser().getUser_name(), m.getContent(), m.getImage_path(), m.getContent_datetime(), m.getIs_url(), m.getLike_count());
     }
 }

@@ -1,16 +1,20 @@
 package irlab.triplan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import irlab.triplan.DTO.*;
+import irlab.triplan.entity.memo;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -41,6 +45,15 @@ public class memoServiceImpl implements memoService{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+}
+    @Transactional
+    public List<memoDTO> getClass(Integer trip_id){
+        List<memo> m = memorepository.findClass(trip_id);
+        List<memoDTO> md = new ArrayList<>();
+        m.forEach(s -> md.add(memoDTO.toDto(s)));
+        return md;
     }
 
 }

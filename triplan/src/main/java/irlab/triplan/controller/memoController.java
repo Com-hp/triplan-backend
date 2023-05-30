@@ -17,6 +17,11 @@ import java.util.Map;
 public class memoController {
     private final memoService memoservice;
 
+    @GetMapping
+    public List<memoDTO> getClass(@RequestParam(name = "trip_id") Integer trip_id){
+        return memoservice.getClass(trip_id);
+    }
+
     @PostMapping("/url")
     public Map<String, Object> classificationURL(@RequestBody Map<String, Object> req){
         Map<String, Object> res = new HashMap<>();

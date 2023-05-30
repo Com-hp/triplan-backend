@@ -20,7 +20,8 @@ public class memoController {
     @PostMapping("/url")
     public Map<String, Object> classificationURL(@RequestBody Map<String, Object> req){
         Map<String, Object> res = new HashMap<>();
-
+        memoservice.classificationURL((Integer) req.get("trip_id"), (Integer) req.get("user_id"), (String) req.get("content"));
+        res.put("Message","성공");
         return res;
     }
 }

@@ -24,6 +24,8 @@ public class userServiceImpl implements userService{
         user u = userrepository.findByAccessToken(access_token);
         userDTO uD = userDTO.toDto(u);
         Map<String, Object> res = userDTO.res(u, userDefaultDTO.toDto(uD.getDefault_id()));
+        Integer cnt = userrepository.countEndTrip(u.getUid());
+        res.put("trip_cnt", cnt);
         return res;
     }
 

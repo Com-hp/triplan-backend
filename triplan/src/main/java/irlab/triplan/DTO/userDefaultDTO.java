@@ -13,6 +13,6 @@ public class userDefaultDTO {
     private String defalut_path;
 
     public static userDefaultDTO toDto(userDefault d){
-        return new userDefaultDTO(d.getDefalut_id(), "/default"+d.getDefault_path());
+        return new userDefaultDTO(d.getDefalut_id(), "/static/default" +d.getDefault_path());
     }
 }

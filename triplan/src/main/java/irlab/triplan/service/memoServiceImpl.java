@@ -47,7 +47,6 @@ public class memoServiceImpl implements memoService{
         }
     }
 
-}
     @Transactional
     public List<memoDTO> getClass(Integer trip_id){
         List<memo> m = memorepository.findClass(trip_id);

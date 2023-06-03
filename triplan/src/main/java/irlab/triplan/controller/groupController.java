@@ -29,8 +29,8 @@ public class groupController {
     }
 
     @PostMapping("/new")
-    public Map<String, Object> CreateGroup(Integer user_id, String group_name, String group_pw){
-        groupservice.CreateGroup(user_id, group_name, group_pw);
+    public Map<String, Object> CreateGroup(@RequestBody  Map<String, Object> req){
+        groupservice.CreateGroup((Integer) req.get("user_id"), (String) req.get("group_name"), (String) req.get("group_pw"));
         Map<String, Object> res = new HashMap<>();
         res.put("Message", "성공");
         return res;

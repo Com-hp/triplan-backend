@@ -22,7 +22,7 @@ public class userController {
     public Map<String, Object> CreateUser(@RequestBody Map<String, Object> req){
         userservice.CreateUser((String) req.get("user_name"), (String) req.get("access_token"), (Integer) req.get("default_id"));
         Map<String, Object> res = new HashMap<>();
-        res.put("Message", "성공");
+        res.put("Message", "DB 확인 필요");
         return res;
     }
     

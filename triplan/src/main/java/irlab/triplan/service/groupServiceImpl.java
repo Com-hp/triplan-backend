@@ -7,9 +7,7 @@ import irlab.triplan.repository.groupUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +29,16 @@ public class groupServiceImpl implements groupService{
     }
 
     @Override
-    public void CreateGroup(Integer user_id, String group_name, String group_pw){
+    public Map<String, Object> CreateGroup(Integer user_id, String group_name, String group_pw){
+        Map<String, Object> res = new HashMap<>();
+        if(!group_pw.matches("[0-9|a-z|A-Z]*")){
+            res.put("Message", "group_pw에 미허용 글자 포함됨");
+            return res;
+        }
+        else if(group_pw.length() != 4){
+            res.put("Message","group_pw가 4자리가 아님");
+            return res;
+        }
         String group_code;
         boolean is;
         List<String> code_list = grouprepository.selectCode();
@@ -45,6 +52,8 @@ public class groupServiceImpl implements groupService{
         grouprepository.CreateGroup(group_name, group_pw, group_code);
         Integer group_id = grouprepository.selectGroupId();
         groupuserrepository.createGroupUser(user_id, group_id);
+        res.put("Message","성공");
+        return res;
     }
 
     private String createCode(){

@@ -39,4 +39,16 @@ public class userController {
         }
         return res;
     }
+
+    @DeleteMapping("/withdraw")
+    public Map<String, Object> deleteUser(@RequestBody Map<String, Object> req){
+        Map<String, Object> res = userservice.deleteUser((Integer) req.get("user_id"));
+        return res;
+    }
+
+    @PutMapping("/change")
+    public Map<String, Object> changeImg(@RequestBody Map<String, Object> req){
+        Map<String, Object> res = userservice.changeImg((Integer) req.get("user_id"), (String) req.get("user_name"), (Integer) req.get("image_id"));
+        return res;
+    }
 }

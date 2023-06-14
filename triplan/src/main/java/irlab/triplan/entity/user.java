@@ -16,7 +16,7 @@ public class user {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer uid;
+    private Integer user_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "default_id")

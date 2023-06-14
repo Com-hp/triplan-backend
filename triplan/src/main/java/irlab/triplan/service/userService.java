@@ -11,4 +11,8 @@ public interface userService {
     Map<String, Object> findByAccessToken(String access_token);
 
     Integer countUser(String access_token);
+
+    Map<String, Object> deleteUser(Integer user_id);
+
+    Map<String, Object> changeImg(Integer user_id, String user_name, Integer default_id);
 }

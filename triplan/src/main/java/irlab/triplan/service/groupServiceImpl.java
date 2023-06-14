@@ -31,6 +31,10 @@ public class groupServiceImpl implements groupService{
     @Override
     public Map<String, Object> CreateGroup(Integer user_id, String group_name, String group_pw){
         Map<String, Object> res = new HashMap<>();
+        if(user_id == null || (group_name == null || group_name.equals(""))){
+            res.put("Message", "null 값 있음");
+            return res;
+        }
         if(!group_pw.matches("[0-9|a-z|A-Z]*")){
             res.put("Message", "group_pw에 미허용 글자 포함됨");
             return res;

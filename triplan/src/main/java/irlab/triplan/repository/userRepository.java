@@ -9,11 +9,14 @@ import org.springframework.stereotype.Repository;
 public interface userRepository extends JpaRepository<user, Integer> {
     @Query(nativeQuery = true, value = "insert into `user` (user_name, access_token, default_id) VALUES (:user_name, :access_token, :default_id)")
     void CreateUser(String user_name, String access_token, Integer default_id);
-
     @Query(nativeQuery = true, value = "select * from `user` where access_token = :access_token ")
     user findByAccessToken(String access_token);
     @Query(nativeQuery = true, value = "select count(user_id) as cnt from `user` where access_token = :access_token")
     Integer countUser(String access_token);
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS endTrip FROM trip as t Left Join tripuser as tu on t.trip_id = tu.trip_id where tu.user_id = :user_id and t.end_date < now();")
     Integer countEndTrip(Integer user_id);
+    @Query(nativeQuery = true, value="DELETE FROM `user` WHERE user_id = :user_id")
+    void deleteUser(Integer user_id);
+    @Query(nativeQuery = true, value="UPDATE `user` set user_name = :user_name, default_id = :default_id where user_id = :user_id")
+    void changeImg(Integer user_id, String user_name, Integer default_id);
 }

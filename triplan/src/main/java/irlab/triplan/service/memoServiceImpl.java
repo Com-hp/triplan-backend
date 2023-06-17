@@ -63,6 +63,7 @@ public class memoServiceImpl implements memoService{
             return res;
         }
         memorepository.createMemo(trip_id, category_id, user_id, content, image_path);
+        res.put("Message","성공");
         return res;
     }
 

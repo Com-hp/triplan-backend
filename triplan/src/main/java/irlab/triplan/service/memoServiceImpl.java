@@ -58,11 +58,23 @@ public class memoServiceImpl implements memoService{
     @Override
     public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, String image_path) {
         Map<String, Object> res = new HashMap<>();
-        if(trip_id == null || category_id == null || user_id == null || content == null){
-            res.put("Message","값 확인 바람");
+        if(trip_id == null || category_id == null || user_id == null ||((content == null || content == "") && image_path == null)){
+            res.put("Message","값 확인 필요");
             return res;
         }
         memorepository.createMemo(trip_id, category_id, user_id, content, image_path);
+        res.put("Message","성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> editMemo(Integer classification_id, Integer category_id, String content, String image_path) {
+        Map<String, Object> res = new HashMap<>();
+        if(classification_id == null || category_id == null || ((content == null || content == "") && image_path == null)){
+            res.put("Message","값 확인 필요");
+            return res;
+        }
+        memorepository.editMemo(classification_id, category_id, content, image_path);
         res.put("Message","성공");
         return res;
     }

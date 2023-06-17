@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,17 @@ public class memoServiceImpl implements memoService{
         List<memoDTO> md = new ArrayList<>();
         m.forEach(s -> md.add(memoDTO.toDto(s)));
         return md;
+    }
+
+    @Override
+    public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, String image_path) {
+        Map<String, Object> res = new HashMap<>();
+        if(trip_id == null || category_id == null || user_id == null || content == null){
+            res.put("Message","값 확인 바람");
+            return res;
+        }
+        memorepository.createMemo(trip_id, category_id, user_id, content, image_path);
+        return res;
     }
 
 }

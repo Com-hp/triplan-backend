@@ -22,6 +22,11 @@ public class memoController {
         return memoservice.getClass(trip_id);
     }
 
+    @PostMapping("/memo")
+    public Map<String, Object> createMemo(@RequestBody Map<String, Object> req){
+        return memoservice.createMemo((Integer) req.get("trip_id"), (Integer) req.get("category_id"), (Integer) req.get("user_id"), req.get("content").toString(), req.get("image_path").toString());
+    }
+
     @PostMapping("/url")
     public Map<String, Object> classificationURL(@RequestBody Map<String, Object> req){
         Map<String, Object> res = new HashMap<>();

@@ -35,7 +35,7 @@ public class memoController {
         return res;
     }
 
-    @PutMapping("/memo/edit")
+    @PutMapping("/memo")
     public Map<String, Object> editMemo(@RequestBody Map<String, Object> req){
         return memoservice.editMemo((Integer) req.get("classification_id"), (Integer) req.get("category_id"), req.get("content").toString(), req.get("image_path").toString());
     }

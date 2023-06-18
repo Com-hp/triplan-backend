@@ -39,4 +39,14 @@ public class memoController {
     public Map<String, Object> editMemo(@RequestBody Map<String, Object> req){
         return memoservice.editMemo((Integer) req.get("classification_id"), (Integer) req.get("category_id"), req.get("content").toString(), req.get("image_path").toString());
     }
+
+    @PostMapping("/like")
+    public Map<String, Object> createLike(@RequestBody Map<String, Object> req){
+        return memoservice.createLike((Integer) req.get("classification_id"), (Integer) req.get("user_id"));
+    }
+
+    @DeleteMapping("/like")
+    public Map<String, Object> deleteLike(@RequestBody Map<String, Object> req){
+        return memoservice.deleteLike((Integer) req.get("classification_id"), (Integer) req.get("user_id"));
+    }
 }

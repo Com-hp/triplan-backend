@@ -59,7 +59,7 @@ public class memoServiceImpl implements memoService{
     public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, String image_path) {
         Map<String, Object> res = new HashMap<>();
         if(trip_id == null || category_id == null || user_id == null ||((content == null || content == "") && image_path == null)){
-            res.put("Message","값 확인 필요");
+            res.put("Message","res 확인");
             return res;
         }
         memorepository.createMemo(trip_id, category_id, user_id, content, image_path);
@@ -71,11 +71,43 @@ public class memoServiceImpl implements memoService{
     public Map<String, Object> editMemo(Integer classification_id, Integer category_id, String content, String image_path) {
         Map<String, Object> res = new HashMap<>();
         if(classification_id == null || category_id == null || ((content == null || content == "") && image_path == null)){
-            res.put("Message","값 확인 필요");
+            res.put("Message","res 확인");
             return res;
         }
         memorepository.editMemo(classification_id, category_id, content, image_path);
         res.put("Message","성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> createLike(Integer classification_id, Integer user_id) {
+        Map<String, Object> res = new HashMap<>();
+        if(classification_id == null || user_id == null){
+            res.put("Message","res 확인");
+            return res;
+        }
+        if(memorepository.existsLike(classification_id, user_id) != 0){
+            res.put("Message", "이미 처리된 메모");
+            return res;
+        }
+        memorepository.createLike(classification_id, user_id);
+        res.put("Message", "성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> deleteLike(Integer classification_id, Integer user_id) {
+        Map<String, Object> res = new HashMap<>();
+        if(classification_id == null || user_id == null){
+            res.put("Message","res 확인");
+            return res;
+        }
+        if(memorepository.existsLike(classification_id, user_id) == 0){
+            res.put("Message", "처리되지 않은 메모");
+            return res;
+        }
+        memorepository.deleteLike(classification_id, user_id);
+        res.put("Message", "성공");
         return res;
     }
 

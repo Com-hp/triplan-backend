@@ -20,4 +20,13 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
 
     @Query(nativeQuery = true, value = "select group_code from `group`;")
     List<String> selectCode();
+
+    @Query(nativeQuery = true, value = "update `group` set group_name = :group_name where group_id = :group_id")
+    void updateGroupName(Integer group_id, String group_name);
+
+    @Query(nativeQuery = true, value = "update `group` set group_path = :group_path where group_id = :group_id")
+    void updateGroupPath(Integer group_id, String group_path);
+
+    @Query(nativeQuery = true, value = "update `group` set group_name = :group_name, group_path = :result where group_id = :group_id")
+    void updateGroup(Integer group_id, String group_name, String result);
 }

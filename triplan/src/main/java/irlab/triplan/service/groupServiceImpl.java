@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class groupServiceImpl implements groupService{
     private final groupReporitory grouprepository;
     private final groupUserRepository groupuserrepository;
+    private final Path path = Path.of("src/main/resources/static/group");
     @Override
     public List<group> readGroup(){
         return grouprepository.findAll();
@@ -71,7 +74,6 @@ public class groupServiceImpl implements groupService{
         }while(is);
 
         //파일 업로드
-        Path path = Path.of("src/main/resources/static/group");
         String newFilename = "group" + System.nanoTime() + (group_path.getOriginalFilename().substring(group_path.getOriginalFilename().lastIndexOf(".")));
         try{
             Files.copy(group_path.getInputStream(), path.resolve(newFilename));
@@ -94,5 +96,51 @@ public class groupServiceImpl implements groupService{
                 .limit(6)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    @Override
+    public Map<String, Object> ModifyGroup(Integer group_id, String group_name, MultipartFile group_path, String pre_path){
+        Map<String, Object> res = new HashMap<>();
+        String result;
+        //예외처리
+        if(group_id == null || (pre_path == null || pre_path.equals(""))){
+            res.put("Error", "group_id와 pre_path는 null일 수 없습니다.");
+            return res;
+        }
+        //그룹 이름만 변경했을 때
+        if(group_path.isEmpty()){
+            grouprepository.updateGroupName(group_id, group_name);
+        }
+        //이미지 파일만 변경했을 때
+        if(group_name == null || group_name.equals("")){
+            result = PutFile(group_path, pre_path);
+            if(result.equals("실패")){
+                res.put("Error", "올바른 확장자가 아닙니다.");
+            }
+            grouprepository.updateGroupPath(group_id, result);
+        }
+        //그룹명과 파일 모두 변경했을 때
+        result = PutFile(group_path, pre_path);
+        grouprepository.updateGroup(group_id, group_name, result);
+        res.put("Message", "성공");
+        return res;
+    }
+
+    private String PutFile(MultipartFile file, String pre_file){
+        String res;
+        if(file.getContentType().startsWith("image") == false){
+            res = "실패";
+            return res;
+        }
+        String newFilename = "group" + System.nanoTime() + (file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
+        String oldFilename = path +"/"+pre_file;
+        try{
+            Files.copy(file.getInputStream(), path.resolve(newFilename));
+            File f = new File(URLDecoder.decode(oldFilename, "UTF-8"));
+            f.delete();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+        return newFilename;
     }
 }

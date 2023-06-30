@@ -35,4 +35,10 @@ public class groupController {
         Map<String, Object> res = groupservice.CreateGroup(group_name, group_pw, user_id, group_path);
         return res;
     }
+
+    @PutMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> ModifyGroup(Integer group_id, String group_name, MultipartFile group_path, String pre_path){
+        Map<String, Object> res = groupservice.ModifyGroup(group_id, group_name, group_path, pre_path);
+        return res;
+    }
 }

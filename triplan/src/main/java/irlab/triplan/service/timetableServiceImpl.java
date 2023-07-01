@@ -34,6 +34,7 @@ public class timetableServiceImpl implements timetableService{
         }
         List<timetableDTO> data = new ArrayList<>();
         t.forEach(s -> data.add(timetableDTO.toDto(s)));
+        res.put("Message","성공");
         res.put("Data",data);
         return res;
     }

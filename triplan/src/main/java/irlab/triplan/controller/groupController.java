@@ -4,8 +4,10 @@ import irlab.triplan.DTO.groupDTO;
 import irlab.triplan.entity.group;
 import irlab.triplan.service.groupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +30,15 @@ public class groupController {
         return groupservice.getGroup(user_id);
     }
 
-    @PostMapping("/new")
-    public Map<String, Object> CreateGroup(@RequestBody  Map<String, Object> req){
-        Map<String, Object> res = groupservice.CreateGroup((Integer) req.get("user_id"), (String) req.get("group_name"), (String) req.get("group_pw"));
+    @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> CreateGroup(String group_name, String group_pw, Integer user_id, MultipartFile group_path){
+        Map<String, Object> res = groupservice.CreateGroup(group_name, group_pw, user_id, group_path);
+        return res;
+    }
+
+    @PutMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> ModifyGroup(Integer group_id, String group_name, MultipartFile group_path, String pre_path){
+        Map<String, Object> res = groupservice.ModifyGroup(group_id, group_name, group_path, pre_path);
         return res;
     }
 }

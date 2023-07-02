@@ -41,4 +41,13 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
 
     @Query(nativeQuery = true, value = "INSERT into groupUser (group_id, user_id)  value(:group_id, :user_id);")
     void InsertJoin(Integer group_id, Integer user_id);
+
+    @Query(nativeQuery = true, value = "DELETE from groupUser where user_id = :user_id and group_id = :group_id")
+    void DeleteGroupUser(Integer group_id, Integer user_id);
+
+    @Query(nativeQuery = true, value = "select count(gu.group_id) from groupUser gu where gu.group_id = :group_id")
+    Integer ExistGroup(Integer group_id);
+
+    @Query(nativeQuery = true, value = "delete from `group` where group_id = :group_id")
+    void DeleteGroup(Integer group_id);
 }

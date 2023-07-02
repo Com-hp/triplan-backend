@@ -198,7 +198,23 @@ public class groupServiceImpl implements groupService{
             res.put("Message", "null 값이 존재합니다.");
             return res;
         }
-
+        Map<String, Object> check = grouprepository.findByCheck(user_id, group_id);
+        if(String.valueOf(check.get("exist")).equals("0")){
+            res.put("Message","가입되지 않은 user_id 입니다.");
+            return res;
+        }
+        else if(String.valueOf(check.get("group_id")).equals("0")){
+            res.put("Message", "존재하지 않는 group_id 입니다.");
+            return res;
+        }
+        //groupUser 삭제
+        grouprepository.DeleteGroupUser(group_id, user_id);
+        Integer exist = grouprepository.ExistGroup(group_id);
+        //group 삭제
+        if(exist == 0){
+            grouprepository.DeleteGroup(group_id);
+        }
+        res.put("Message", "성공");
         return res;
     }
 }

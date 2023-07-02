@@ -3,8 +3,10 @@ package irlab.triplan.controller;
 import irlab.triplan.DTO.memoDTO;
 import irlab.triplan.service.memoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,31 +24,28 @@ public class memoController {
         return memoservice.getClass(trip_id);
     }
 
-    @PostMapping("/memo")
-    public Map<String, Object> createMemo(@RequestBody Map<String, Object> req){
-        return memoservice.createMemo((Integer) req.get("trip_id"), (Integer) req.get("category_id"), (Integer) req.get("user_id"), req.get("content").toString(), req.get("image_path").toString());
+    @PostMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, MultipartFile image_path){
+        return memoservice.createMemo(trip_id, category_id, user_id, content, image_path);
     }
 
-    @PostMapping("/url")
-    public Map<String, Object> classificationURL(@RequestBody Map<String, Object> req){
-        Map<String, Object> res = new HashMap<>();
-        memoservice.classificationURL((Integer) req.get("trip_id"), (Integer) req.get("user_id"), (String) req.get("content"));
-        res.put("Message","성공");
-        return res;
+    @PostMapping(value = "/url", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String content){
+        return memoservice.classificationURL(trip_id, user_id, content);
     }
 
-    @PutMapping("/memo")
-    public Map<String, Object> editMemo(@RequestBody Map<String, Object> req){
-        return memoservice.editMemo((Integer) req.get("classification_id"), (Integer) req.get("category_id"), req.get("content").toString(), req.get("image_path").toString());
+    @PutMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> editMemo(Integer classification_id, Integer category_id, String content, MultipartFile image_path, String pre_path){
+        return memoservice.editMemo(classification_id, category_id, content, image_path, pre_path);
     }
 
-    @PostMapping("/like")
-    public Map<String, Object> createLike(@RequestBody Map<String, Object> req){
-        return memoservice.createLike((Integer) req.get("classification_id"), (Integer) req.get("user_id"));
+    @PostMapping(value = "/like", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> createLike(Integer classification_id, Integer user_id){
+        return memoservice.createLike(classification_id, user_id);
     }
 
-    @DeleteMapping("/like")
-    public Map<String, Object> deleteLike(@RequestBody Map<String, Object> req){
-        return memoservice.deleteLike((Integer) req.get("classification_id"), (Integer) req.get("user_id"));
+    @DeleteMapping(value = "/like", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> deleteLike(Integer classification_id, Integer user_id){
+        return memoservice.deleteLike(classification_id, user_id);
     }
 }

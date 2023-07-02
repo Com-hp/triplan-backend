@@ -25,7 +25,7 @@ public class userController {
         System.out.println(user_name+" "+access_token+" "+default_id);
         userservice.CreateUser(user_name, access_token, default_id);
         Map<String, Object> res = new HashMap<>();
-        res.put("Message", "DB 확인 필요"); //이게 왜 있지?..
+        res.put("Message", "DB 확인 필요"); //이거어는 왜 여기에 있죠?
         return res;
     }
     

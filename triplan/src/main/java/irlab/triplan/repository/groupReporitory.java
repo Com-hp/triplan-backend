@@ -1,11 +1,13 @@
 package irlab.triplan.repository;
 
 import irlab.triplan.entity.group;
+import irlab.triplan.entity.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface groupReporitory extends JpaRepository<group, Integer> {
@@ -18,6 +20,7 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
     @Query(nativeQuery = true, value = "SELECT LAST_INSERT_ID();")
     Integer selectGroupId();
 
+
     @Query(nativeQuery = true, value = "select group_code from `group`;")
     List<String> selectCode();
 
@@ -29,4 +32,13 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
 
     @Query(nativeQuery = true, value = "update `group` set group_name = :group_name, group_path = :result where group_id = :group_id")
     void updateGroup(Integer group_id, String group_name, String result);
+
+    @Query(nativeQuery = true, value = "SELECT u.user_id, u.default_id, u.user_name FROM `user`  u WHERE user_id in (SELECT gu.user_id from groupUser gu WHERE gu.group_id = :group_id)")
+    List<Map<String, Object>> findByMemeber(Integer group_id);
+
+    @Query(nativeQuery = true, value = "SELECT g.group_pw,COUNT(*) as cnt, COUNT(CASE WHEN user_id = :user_id THEN 1 END) as exist FROM groupUser gu left join `group` g on g.group_id = gu.group_id WHERE gu.group_id  = :group_id")
+    Map<String, Object> findByCheck(Integer user_id, Integer group_id);
+
+    @Query(nativeQuery = true, value = "INSERT into groupUser (group_id, user_id)  value(:group_id, :user_id);")
+    void InsertJoin(Integer group_id, Integer user_id);
 }

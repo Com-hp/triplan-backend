@@ -41,4 +41,16 @@ public class groupController {
         Map<String, Object> res = groupservice.ModifyGroup(group_id, group_name, group_path, pre_path);
         return res;
     }
+
+    @GetMapping("/member")
+    public Map<String, Object> GroupMember(Integer group_id){
+        Map<String, Object> res = groupservice.GroupMember(group_id);
+        return res;
+    }
+
+    @PostMapping("join")
+    public Map<String, Object> GroupJoin(Integer user_id, Integer group_id, String group_pw){
+        Map<String, Object> res = groupservice.GroupJoin(user_id, group_id, group_pw);
+        return res;
+    }
 }

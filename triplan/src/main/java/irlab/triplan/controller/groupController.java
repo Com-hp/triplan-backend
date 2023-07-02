@@ -48,9 +48,15 @@ public class groupController {
         return res;
     }
 
-    @PostMapping(value = "join", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/join", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> GroupJoin(Integer user_id, Integer group_id, String group_pw){
         Map<String, Object> res = groupservice.GroupJoin(user_id, group_id, group_pw);
+        return res;
+    }
+
+    @DeleteMapping(value = "/delete", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> GroupDelete(Integer user_id, Integer group_id){
+        Map<String, Object> res = groupservice.GroupDelete(user_id, group_id);
         return res;
     }
 }

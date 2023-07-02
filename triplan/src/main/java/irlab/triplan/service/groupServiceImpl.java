@@ -170,15 +170,15 @@ public class groupServiceImpl implements groupService{
         }
         //group_pw, cnt (해당 group_id 수), exist (group_id에 해당하는 user_id 존재 여부 (0:X/1:O))
         Map<String, Object> check = grouprepository.findByCheck(user_id, group_id);
-        if(check.get("cnt").equals("0")){
+        if(String.valueOf(check.get("cnt")).equals("0")){
             res.put("Message", "존재하지 않는 group_id 입니다.");
             return res;
         }
-        if(check.get("exist").equals("1")){
+        if(String.valueOf(check.get("exist")).equals("1")){
             res.put("Message","이미 가입된 user_id 입니다.");
             return res;
         }
-        if(check.get("group_pw").equals(group_pw)){
+        if(!check.get("group_pw").equals(group_pw)){
             res.put("Message", "비밀번호가 동일하지 않습니다.");
             return res;
         }
@@ -187,6 +187,18 @@ public class groupServiceImpl implements groupService{
         //모든 조건 충족 시 그룹 가입 진행
         grouprepository.InsertJoin(group_id, user_id);
         res.put("Message","성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> GroupDelete(Integer user_id, Integer group_id){
+        Map<String, Object> res = new HashMap<>();
+        //예외처리
+        if(user_id == null || group_id == null){
+            res.put("Message", "null 값이 존재합니다.");
+            return res;
+        }
+
         return res;
     }
 }

@@ -27,7 +27,11 @@ public class memoDTO {
     private Integer like_count;
 
     public static memoDTO toDto(memo m){
-        return new memoDTO(m.getClassification_id(), m.getCTrip().getT_id(), m.getCCategory().getCategory_id(), m.getCCategory().getClassification(),
+        if(m.getIs_url() == 1)
+            return new memoDTO(m.getClassification_id(), m.getCTrip().getT_id(), m.getCCategory().getCategory_id(), m.getCCategory().getClassification(),
                 m.getCUser().getUser_id(), m.getCUser().getUser_name(), m.getContent(), m.getImage_path(), m.getContent_datetime(), m.getIs_url(), m.getLike_count());
+        else
+            return new memoDTO(m.getClassification_id(), m.getCTrip().getT_id(), m.getCCategory().getCategory_id(), m.getCCategory().getClassification(),
+                    m.getCUser().getUser_id(), m.getCUser().getUser_name(), m.getContent(), ("/memo/"+m.getImage_path()), m.getContent_datetime(), m.getIs_url(), m.getLike_count());
     }
 }

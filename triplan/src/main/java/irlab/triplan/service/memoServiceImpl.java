@@ -6,6 +6,7 @@ import irlab.triplan.entity.memo;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -29,17 +30,16 @@ public class memoServiceImpl implements memoService{
     private final Path path = Path.of("src/main/resources/static/memo");
 
     @Override
+    @Transactional
     public Map<String, Object> getClass(Integer trip_id) {
         Map<String ,Object> res = new HashMap<>();
         if(trip_id == null){
             res.put("Message","req 확인");
             return res;
         }
-        List<memo> tmp = memorepository.getClass(trip_id);
-        List<memoDTO> data = new ArrayList<>();
-        tmp.forEach(m -> data.add(memoDTO.toDto(m)));
+        List<Map<String,Object>> tmp = memorepository.getClass(trip_id);
         res.put("Message", "성공");
-        res.put("Data",tmp);
+        res.put("Data", tmp);
         return res;
     }
 

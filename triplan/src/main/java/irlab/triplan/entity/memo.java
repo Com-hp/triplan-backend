@@ -44,6 +44,6 @@ public class memo {
     @Column(name = "like_count")
     private Integer like_count;
 
-    @JoinColumn(name = "category")
+    @Column(name = "category")
     private String Category;
 }

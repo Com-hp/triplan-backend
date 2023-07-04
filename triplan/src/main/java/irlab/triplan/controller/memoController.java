@@ -25,8 +25,8 @@ public class memoController {
     }
 
     @PostMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, MultipartFile image_path){
-        return memoservice.createMemo(trip_id, category_id, user_id, content, image_path);
+    public Map<String, Object> createMemo(Integer trip_id, Integer user_id, String content, MultipartFile image_path, String category){
+        return memoservice.createMemo(trip_id, user_id, content, image_path, category);
     }
 
     @PostMapping(value = "/url", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -35,8 +35,8 @@ public class memoController {
     }
 
     @PutMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> editMemo(Integer classification_id, Integer category_id, String content, MultipartFile image_path, String pre_path){
-        return memoservice.editMemo(classification_id, category_id, content, image_path, pre_path);
+    public Map<String, Object> editMemo(Integer classification_id, String category, String content, MultipartFile image_path, String pre_path){
+        return memoservice.editMemo(classification_id, category, content, image_path, pre_path);
     }
 
     @PostMapping(value = "/like", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

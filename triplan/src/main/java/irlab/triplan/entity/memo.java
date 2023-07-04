@@ -25,10 +25,6 @@ public class memo {
     private trip cTrip;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private category cCategory;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private user cUser;
 
@@ -47,4 +43,7 @@ public class memo {
 
     @Column(name = "like_count")
     private Integer like_count;
+
+    @JoinColumn(name = "category")
+    private String Category;
 }

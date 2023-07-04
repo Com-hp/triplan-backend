@@ -44,7 +44,7 @@ public class memoServiceImpl implements memoService{
             br.close();
             Map<String, String> result = mapper.readValue(sb.toString(), Map.class);
 
-            memorepository.classificationURL(trip_id, Integer.valueOf(result.get("category"))+1,user_id,url,result.get("image_url"));
+            memorepository.classificationURL(trip_id, result.get("category"),user_id,url,result.get("image_url"));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -63,9 +63,9 @@ public class memoServiceImpl implements memoService{
     }
 
     @Override
-    public Map<String, Object> createMemo(Integer trip_id, Integer category_id, Integer user_id, String content, MultipartFile image_path) {
+    public Map<String, Object> createMemo(Integer trip_id, Integer user_id, String content, MultipartFile image_path, String category) {
         Map<String, Object> res = new HashMap<>();
-        if(trip_id == null || category_id == null || user_id == null ||((content == null || content == "") && image_path.isEmpty())){
+        if(trip_id == null || (category == null || category == "") || user_id == null ||((content == null || content == "") && image_path.isEmpty())){
             res.put("Message","req 확인");
             return res;
         }
@@ -83,27 +83,27 @@ public class memoServiceImpl implements memoService{
             }
         }
         else newFilename = "대강 기본 이미지이름.jpg";
-        memorepository.createMemo(trip_id, category_id, user_id, content, newFilename);
+        memorepository.createMemo(trip_id, user_id, content, newFilename, category);
         res.put("Message","성공");
         return res;
     }
 
     @Override
-    public Map<String, Object> editMemo(Integer classification_id, Integer category_id, String content, MultipartFile image_path, String pre_path) {
+    public Map<String, Object> editMemo(Integer classification_id, String category, String content, MultipartFile image_path, String pre_path) {
         Map<String, Object> res = new HashMap<>();
-        if(classification_id == null || category_id == null || ((content == null || content == "") && image_path.isEmpty()) || (pre_path == null || pre_path =="")){
+        if(classification_id == null || (category == null || category == "") || ((content == null || content == "") && image_path.isEmpty()) || (pre_path == null || pre_path =="")){
             res.put("Message","req 확인");
             return res;
         }
         if(image_path.isEmpty()){
-            memorepository.editMemo(classification_id, category_id, content, pre_path);
+            memorepository.editMemo(classification_id, category, content, pre_path);
         }
         else{
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
             try {
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
                 File f = new File(URLDecoder.decode("src/main/resources/static"+pre_path, "UTF-8"));
-                memorepository.editMemo(classification_id, category_id, content, newFilename);
+                memorepository.editMemo(classification_id, category, content, newFilename);
                 f.delete();
             } catch (IOException e) {
                 throw new RuntimeException(e);

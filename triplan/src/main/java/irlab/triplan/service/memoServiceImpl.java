@@ -1,6 +1,8 @@
 package irlab.triplan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import irlab.triplan.DTO.memoDTO;
+import irlab.triplan.entity.memo;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,6 +27,22 @@ import java.util.Map;
 public class memoServiceImpl implements memoService{
     private final memoRepository memorepository;
     private final Path path = Path.of("src/main/resources/static/memo");
+
+    @Override
+    public Map<String, Object> getClass(Integer trip_id) {
+        Map<String ,Object> res = new HashMap<>();
+        if(trip_id == null){
+            res.put("Message","req 확인");
+            return res;
+        }
+        List<memo> tmp = memorepository.getClass(trip_id);
+        List<memoDTO> data = new ArrayList<>();
+        tmp.forEach(m -> data.add(memoDTO.toDto(m)));
+        res.put("Message", "성공");
+        res.put("Data",tmp);
+        return res;
+    }
+
     @Override
     public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String url) {
         try {
@@ -69,17 +89,14 @@ public class memoServiceImpl implements memoService{
             }
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
             try {
-                System.out.println("여기에요!!!!!!");
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             if ((content == null || content.equals(""))){//사진만 등록할 때
-                System.out.println("case 2");
                 memorepository.createMemo_only_file(trip_id,user_id,newFilename,category);
             }
             else{//둘 다 있을 때
-                System.out.println("case 3");
                 memorepository.createMemo(trip_id,user_id,content,newFilename,category);
             }
         }

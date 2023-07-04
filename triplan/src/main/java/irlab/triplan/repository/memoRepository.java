@@ -8,12 +8,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface memoRepository extends JpaRepository<memo, Integer> {
+    @Query(nativeQuery = true, value = "select * FROM classification WHERE trip_id = :trip_id")
+    List<memo> getClass(Integer trip_id);
     @Query(nativeQuery = true, value = "insert into `classification` (trip_id, category_id, user_id, content, image_path, content_datetime, is_url, like_count) values (:trip_id, :category_id, :user_id, :content, :image_path, now(), 1, 0)")
     void classificationURL(Integer trip_id, String category, Integer user_id, String content, String image_path);
-
     @Query(nativeQuery = true, value = "insert into `classification` (trip_id, user_id, content, image_path, content_datetime, is_url, like_count, category) values (:trip_id, :user_id, :content, :image_path, now(), 0, 0, :category)")
     void createMemo(Integer trip_id, Integer user_id, String content, String image_path, String category);
     @Query(nativeQuery = true, value = "INSERT INTO `classification` (trip_id, user_id, image_path, content_datetime, is_url, like_count, category) VALUES (:trip_id, :user_id, :image_path, now(), 0, 0, :category)")

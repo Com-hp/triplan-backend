@@ -19,6 +19,11 @@ import java.util.Map;
 public class memoController {
     private final memoService memoservice;
 
+    @GetMapping
+    public Map<String, Object> getClass(@RequestParam(name = "trip_id") Integer trip_id){
+        return memoservice.getClass(trip_id);
+    }
+
     @PostMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> createMemo(Integer trip_id, Integer user_id, String content, MultipartFile image_path, String category){
         return memoservice.createMemo(trip_id, user_id, content, image_path, category);

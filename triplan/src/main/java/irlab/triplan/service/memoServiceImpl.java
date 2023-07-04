@@ -54,7 +54,7 @@ public class memoServiceImpl implements memoService{
     @Override
     public Map<String, Object> createMemo(Integer trip_id, Integer user_id, String content, MultipartFile image_path, String category) {
         Map<String, Object> res = new HashMap<>();
-        if(trip_id == null || (category == null || category == "") || user_id == null ||((content == null || content == "") && image_path.isEmpty())){
+        if(trip_id == null || (category == null || category.equals("")) || user_id == null ||((content == null || content.equals("")) && image_path.isEmpty())){
             res.put("Message","req 확인");
             return res;
         }
@@ -74,7 +74,7 @@ public class memoServiceImpl implements memoService{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if ((content == null || content == "")){//사진만 등록할 때
+            if ((content == null || content.equals(""))){//사진만 등록할 때
                 System.out.println("case 2");
                 memorepository.createMemo_only_file(trip_id,user_id,newFilename,category);
             }
@@ -90,7 +90,7 @@ public class memoServiceImpl implements memoService{
     @Override
     public Map<String, Object> editMemo(Integer classification_id, String category, String content, MultipartFile image_path, String pre_path) {
         Map<String, Object> res = new HashMap<>();
-        if(classification_id == null || (category == null || category == "") || ((content == null || content == "") && image_path.isEmpty()) || (pre_path == null || pre_path =="")){
+        if(classification_id == null || (category == null || category.equals("")) || ((content == null || content.equals("")) && image_path.isEmpty()) || (pre_path == null || pre_path.equals(""))){
             res.put("Message","req 확인");
             return res;
         }

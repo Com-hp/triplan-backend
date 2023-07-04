@@ -1,12 +1,9 @@
 package irlab.triplan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import irlab.triplan.DTO.*;
-import irlab.triplan.entity.memo;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -15,11 +12,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,7 +29,7 @@ public class memoServiceImpl implements memoService{
             ObjectMapper mapper = new ObjectMapper();
             URL tmp = new URL("http://localhost:5000/"+url);
             HttpURLConnection conn = (HttpURLConnection) tmp.openConnection();
-            Charset charset = Charset.forName("UTF-8");
+            Charset charset = StandardCharsets.UTF_8;
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
 
             String inputLine;
@@ -54,13 +50,6 @@ public class memoServiceImpl implements memoService{
         res.put("Message", "성공");
         return res;
     }
-    @Transactional
-    public List<memoDTO> getClass(Integer trip_id){
-        List<memo> m = memorepository.findClass(trip_id);
-        List<memoDTO> md = new ArrayList<>();
-        m.forEach(s -> md.add(memoDTO.toDto(s)));
-        return md;
-    }
 
     @Override
     public Map<String, Object> createMemo(Integer trip_id, Integer user_id, String content, MultipartFile image_path, String category) {
@@ -69,21 +58,31 @@ public class memoServiceImpl implements memoService{
             res.put("Message","req 확인");
             return res;
         }
-        else if(image_path.getContentType().startsWith("image") == false){
-            res.put("Message", "이미지 파일이 아님");
-            return res;
+
+        if((content != null || content != "")&& image_path.isEmpty()){//content만 등록할 때
+            memorepository.createMemo_only_content(trip_id,user_id,content,category);
         }
-        String newFilename;
-        if(!image_path.isEmpty()) {
-            newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
+        else{//이미지 등록
+            if(!image_path.getContentType().startsWith("image")){
+                res.put("Message", "이미지 파일이 아님");
+                return res;
+            }
+            String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
             try {
+                System.out.println("여기에요!!!!!!");
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            if ((content == null || content == "")){//사진만 등록할 때
+                System.out.println("case 2");
+                memorepository.createMemo_only_file(trip_id,user_id,newFilename,category);
+            }
+            else{//둘 다 있을 때
+                System.out.println("case 3");
+                memorepository.createMemo(trip_id,user_id,content,newFilename,category);
+            }
         }
-        else newFilename = "대강 기본 이미지이름.jpg";
-        memorepository.createMemo(trip_id, user_id, content, newFilename, category);
         res.put("Message","성공");
         return res;
     }
@@ -102,7 +101,7 @@ public class memoServiceImpl implements memoService{
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
             try {
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
-                File f = new File(URLDecoder.decode("src/main/resources/static"+pre_path, "UTF-8"));
+                File f = new File(URLDecoder.decode("src/main/resources/static"+pre_path, StandardCharsets.UTF_8));
                 memorepository.editMemo(classification_id, category, content, newFilename);
                 f.delete();
             } catch (IOException e) {

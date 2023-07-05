@@ -16,7 +16,7 @@ public interface memoRepository extends JpaRepository<memo, Integer> {
             "inner join `user` u on u.user_id = c.user_id " +
             "where c.trip_id = :trip_id")
     List<Map<String, Object>> getClass(Integer trip_id);
-    @Query(nativeQuery = true, value = "insert into `classification` (trip_id, category_id, user_id, content, image_path, content_datetime, is_url, like_count) values (:trip_id, :category_id, :user_id, :content, :image_path, now(), 1, 0)")
+    @Query(nativeQuery = true, value = "insert into `classification` (trip_id, category, user_id, content, image_path, content_datetime, is_url, like_count) values (:trip_id, :category, :user_id, :content, :image_path, now(), 1, 0)")
     void classificationURL(Integer trip_id, String category, Integer user_id, String content, String image_path);
     @Query(nativeQuery = true, value = "insert into `classification` (trip_id, user_id, content, image_path, content_datetime, is_url, like_count, category) values (:trip_id, :user_id, :content, :image_path, now(), 0, 0, :category)")
     void createMemo(Integer trip_id, Integer user_id, String content, String image_path, String category);

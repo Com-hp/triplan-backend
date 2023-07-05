@@ -14,6 +14,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor //final 필드 값을 파라미터로 받는 생성자 생성
@@ -43,11 +44,14 @@ public class groupServiceImpl implements groupService{
             res.put("Message", "null값이 존재합니다.");
             return res;
         }
-        if(!group_pw.matches("[0-9|a-z|A-Z]*")){
+        group_pw = group_pw.replaceAll("\"","");
+        if(!Pattern.compile("^[0-9a-zA-Z]*").matcher(group_pw).find()){
+            System.out.println(group_pw);
             res.put("Message", "group_pw에 미허용 글자가 포함되어 있습니다.");
             return res;
         }
         else if(group_pw.length() != 4){
+            System.out.println(group_pw.length());
             res.put("Message","group_pw가 4자리가 아닙니다.");
             return res;
         }

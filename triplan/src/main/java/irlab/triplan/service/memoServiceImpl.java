@@ -105,23 +105,14 @@ public class memoServiceImpl implements memoService{
     }
 
     @Override
-    public Map<String, Object> editMemo(Integer classification_id, String category, String content, MultipartFile image_path, String pre_path, Integer user_id) {
+    public Map<String, Object> editMemo(Integer classification_id, String category, String content, MultipartFile image_path, String pre_path) {
         Map<String, Object> res = new HashMap<>();
-        if(classification_id == null || (category == null || category.equals(""))){
+        if(classification_id == null || (category == null || category.equals("")) || ((content == null || content.equals("")) && image_path.isEmpty()) || (pre_path == null || pre_path.equals(""))){
             res.put("Message","req 확인");
             return res;
         }
-        Map<String,Object> preData = memorepository.preprocessing(classification_id);
-        if(!preData.get("user_id").equals(user_id)){
-            res.put("Message","작성자가 아닙니다");
-            return res;
-        }
         if(image_path.isEmpty()){
-            if ((content == null || content.equals("")) && image_path.isEmpty()&&(pre_path==null||pre_path == "")){
-                res.put("Message","내용과 이미지가 다 없음");
-                return res;
-            }
-            memorepository.editMemo_only_content(classification_id, category, content);
+            memorepository.editMemo(classification_id, category, content, pre_path);
         }
         else{
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
@@ -134,26 +125,6 @@ public class memoServiceImpl implements memoService{
                 throw new RuntimeException(e);
             }
         }
-        res.put("Message","성공");
-        return res;
-    }
-
-    @Override
-    public Map<String, Object> deleteMemo(Integer classification_id, Integer user_id) {
-        Map<String, Object> res = new HashMap<>();
-        if(classification_id == null || user_id == null){
-            res.put("Message","req 확인");
-            return res;
-        }
-        Map<String, Object> preData = memorepository.preprocessing(classification_id);
-        if(!preData.get("user_id").equals(user_id)){
-            res.put("Message","작성자가 아닙니다");
-            return res;
-        }
-        memorepository.deleteMemo(classification_id);
-        String pre_path = preData.get("image_path").toString();
-        File f = new File(URLDecoder.decode(path+pre_path, StandardCharsets.UTF_8));
-        f.delete();
         res.put("Message","성공");
         return res;
     }

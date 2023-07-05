@@ -36,7 +36,7 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
     @Query(nativeQuery = true, value = "SELECT u.user_id, u.default_id, u.user_name FROM `user`  u WHERE user_id in (SELECT gu.user_id from groupUser gu WHERE gu.group_id = :group_id)")
     List<Map<String, Object>> findByMemeber(Integer group_id);
 
-    @Query(nativeQuery = true, value = "SELECT g.group_pw,COUNT(*) as cnt, COUNT(CASE WHEN user_id = :user_id THEN 1 END) as exist FROM groupUser gu left join `group` g on g.group_id = gu.group_id WHERE gu.group_id  = :group_id")
+    @Query(nativeQuery = true, value = "SELECT g.group_pw,COUNT(*) as cnt, COUNT(CASE WHEN user_id = :user_id THEN 1 END) as exist, g.group_path FROM groupUser gu left join `group` g on g.group_id = gu.group_id WHERE gu.group_id  = :group_id")
     Map<String, Object> findByCheck(Integer user_id, Integer group_id);
 
     @Query(nativeQuery = true, value = "INSERT into groupUser (group_id, user_id)  value(:group_id, :user_id);")
@@ -47,6 +47,9 @@ public interface groupReporitory extends JpaRepository<group, Integer> {
 
     @Query(nativeQuery = true, value = "select count(gu.group_id) from groupUser gu where gu.group_id = :group_id")
     Integer ExistGroup(Integer group_id);
+
+    @Query(nativeQuery = true, value = "select group_name from `group` where group_code = :group_code")
+    String findByGroupName(String group_code);
 
     @Query(nativeQuery = true, value = "delete from `group` where group_id = :group_id")
     void DeleteGroup(Integer group_id);

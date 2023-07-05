@@ -151,9 +151,13 @@ public class memoServiceImpl implements memoService{
             return res;
         }
         memorepository.deleteMemo(classification_id);
-        String pre_path = preData.get("image_path").toString();
-        File f = new File(URLDecoder.decode(path+pre_path, StandardCharsets.UTF_8));
-        f.delete();
+        System.out.println(preData.get("is_url"));
+        if((Integer.valueOf(preData.get("is_url").toString())==0)){
+
+            System.out.println("여기 사람 살아요");
+            File f = new File(URLDecoder.decode(path + "/" + preData.get("image_path"), StandardCharsets.UTF_8));
+            f.delete();
+        }
         res.put("Message","성공");
         return res;
     }

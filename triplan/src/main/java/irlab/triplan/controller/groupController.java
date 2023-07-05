@@ -48,6 +48,12 @@ public class groupController {
         return res;
     }
 
+    @GetMapping("/join")
+    public Map<String, Object> SelectCode(String group_code){
+        Map<String, Object> res = groupservice.SelectCode(group_code);
+        return res;
+    }
+
     @PostMapping(value = "/join", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> GroupJoin(Integer user_id, Integer group_id, String group_pw){
         Map<String, Object> res = groupservice.GroupJoin(user_id, group_id, group_pw);

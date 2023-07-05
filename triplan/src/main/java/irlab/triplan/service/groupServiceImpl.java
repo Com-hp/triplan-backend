@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -101,6 +102,19 @@ public class groupServiceImpl implements groupService{
                 .limit(6)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    @Override
+    public Map<String, Object> SelectCode(String group_code){
+        Map<String, Object> res = new HashMap<>();
+        if(group_code.equals("") || group_code.length() != 6){
+            res.put("Message", "null 값이 존재하거나 group_code가 6자리가 아닙니다.");
+            return res;
+        }
+        String group_name = grouprepository.findByGroupName(group_code);
+        res.put("Message", "성공");
+        res.put("Data", group_name);
+        return res;
     }
 
     @Override
@@ -217,6 +231,8 @@ public class groupServiceImpl implements groupService{
         //group 삭제
         if(exist == 0){
             grouprepository.DeleteGroup(group_id);
+            File f = new File(URLDecoder.decode(path + "/" + check.get("group_path"), StandardCharsets.UTF_8));
+            f.delete();
         }
         res.put("Message", "성공");
         return res;

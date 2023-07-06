@@ -27,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class memoServiceImpl implements memoService{
     private final memoRepository memorepository;
-    private final Path path = Path.of("src/main/resources/static/memo");
+    private final Path path = Path.of("resources/memo");
 
     @Override
     @Transactional
@@ -88,6 +88,13 @@ public class memoServiceImpl implements memoService{
                 return res;
             }
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
+            if(!Files.exists(path)){
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             try {
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
             } catch (IOException e) {
@@ -126,8 +133,15 @@ public class memoServiceImpl implements memoService{
         else{
             String newFilename = "memo" + System.nanoTime() + (image_path.getOriginalFilename().substring(image_path.getOriginalFilename().lastIndexOf('.')));
             try {
+                if(!Files.exists(path)){
+                    try {
+                        Files.createDirectories(path);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
-                File f = new File(URLDecoder.decode("src/main/resources/static"+pre_path, StandardCharsets.UTF_8));
+                File f = new File(URLDecoder.decode("resources"+pre_path, StandardCharsets.UTF_8));
                 memorepository.editMemo(classification_id, category, content, newFilename);
                 f.delete();
             } catch (IOException e) {
@@ -153,8 +167,13 @@ public class memoServiceImpl implements memoService{
         memorepository.deleteMemo(classification_id);
         System.out.println(preData.get("is_url"));
         if((Integer.valueOf(preData.get("is_url").toString())==0)){
-
-            System.out.println("여기 사람 살아요");
+            if(!Files.exists(path)){
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             File f = new File(URLDecoder.decode(path + "/" + preData.get("image_path"), StandardCharsets.UTF_8));
             f.delete();
         }

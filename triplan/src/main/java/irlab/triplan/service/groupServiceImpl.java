@@ -6,14 +6,15 @@ import irlab.triplan.repository.groupReporitory;
 import irlab.triplan.repository.groupUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -22,8 +23,8 @@ import java.util.regex.Pattern;
 public class groupServiceImpl implements groupService{
     private final groupReporitory grouprepository;
     private final groupUserRepository groupuserrepository;
-    private final Path path = Path.of("src/main/resources/static/group");
-    private final Path oldpath = Path.of("src/main/resources/static");
+    private final Path path = Path.of("resources/group");
+    private final Path oldpath = Path.of("resources");
     @Override
     public List<group> readGroup(){
         return grouprepository.findAll();
@@ -80,10 +81,24 @@ public class groupServiceImpl implements groupService{
         }
         else{
             newFilename = "group" + System.nanoTime() + (group_path.getOriginalFilename().substring(group_path.getOriginalFilename().lastIndexOf(".")));
-            try{
-                Files.copy(group_path.getInputStream(), path.resolve(newFilename));
-            }catch(IOException e){
-                throw new RuntimeException(e);
+            if(!Files.exists(path)){
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            try (InputStream inputStream = group_path.getInputStream()) {
+                Path imagePath = Path.of(getClass().getResource(String.valueOf(path)).toURI()).resolve(newFilename);
+                try (OutputStream outputStream = new FileOutputStream(imagePath.toFile())) {
+                    StreamUtils.copy(inputStream, outputStream);
+                } catch (IOException e) {
+                    res.put("Message", "이미지 파일 업로드에 실패했습니다.");
+                    return res;
+                }
+            } catch (Exception e) {
+                res.put("Message", "이미지 파일 업로드에 실패했습니다.");
+                return res;
             }
         }
 

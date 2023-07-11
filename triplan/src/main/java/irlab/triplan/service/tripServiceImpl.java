@@ -1,11 +1,11 @@
 package irlab.triplan.service;
 
 import irlab.triplan.DTO.tripDTO;
+import irlab.triplan.DTO.userDTO;
 import irlab.triplan.entity.trip;
 import irlab.triplan.repository.tripRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
@@ -45,6 +45,15 @@ public class tripServiceImpl implements tripService{
     }
 
     @Override
+    public Map<String, Object> getTripMember(Integer trip_id){
+        List<Map<String, Object>> t = triprepository.findByMember(trip_id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("Message", "성공");
+        res.put("Data",t);
+        return res;
+    }
+
+    @Override
     public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path){
         Map<String, Object> res = new HashMap<>();
         if(group_id == null){
@@ -78,6 +87,17 @@ public class tripServiceImpl implements tripService{
         }
         triprepository.InsertTrip(group_id, newFilename);
         res.put("Message", "성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> insertMember(Integer trip_id, Integer user_id){
+        Map<String, Object> res = new HashMap<>();
+        if(trip_id == null || user_id == null || trip_id.equals("") || user_id.equals("")){
+            res.put("Message", "trip_id 또는 user_id가 null 입니다.");
+        }
+        triprepository.insertMember(trip_id, user_id);
+        res.put("Message","성공");
         return res;
     }
 }

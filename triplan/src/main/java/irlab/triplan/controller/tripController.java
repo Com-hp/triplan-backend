@@ -51,9 +51,22 @@ public class tripController {
         return res;
     }
 
+    @GetMapping("/member")
+    public Map<String, Object> getTripMemeber(@RequestParam(name="trip_id") Integer trip_id){
+        Map<String, Object> res = tripservice.getTripMember(trip_id);
+        return res;
+    }
+
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path){
         Map<String, Object> res = tripservice.CreateTrip(group_id, trip_path);
         return res;
     }
+
+    @PostMapping(value = "/member/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> insertMember(Integer trip_id, Integer user_id){
+        Map<String, Object> res = tripservice.insertMember(trip_id, user_id);
+        return res;
+    }
+
 }

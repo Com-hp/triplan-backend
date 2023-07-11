@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InterruptedIOException;
 import java.util.*;
 
 @Controller
@@ -66,6 +67,12 @@ public class tripController {
     @PostMapping(value = "/member/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> insertMember(Integer trip_id, Integer user_id){
         Map<String, Object> res = tripservice.insertMember(trip_id, user_id);
+        return res;
+    }
+
+    @DeleteMapping(value = "/member/delete", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Map<String, Object> deleteMember(Integer trip_id, Integer user_id){
+        Map<String, Object> res = tripservice.deleteMember(trip_id, user_id);
         return res;
     }
 

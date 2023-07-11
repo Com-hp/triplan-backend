@@ -100,4 +100,15 @@ public class tripServiceImpl implements tripService{
         res.put("Message","성공");
         return res;
     }
+
+    @Override
+    public Map<String, Object> deleteMember(Integer trip_id, Integer user_id){
+        Map<String, Object> res = new HashMap<>();
+        if(trip_id == null || user_id == null || trip_id.equals("") || user_id.equals("")){
+            res.put("Message", "trip_id 또는 user_id가 null 입니다.");
+        }
+        triprepository.deleteMember(trip_id, user_id);
+        res.put("Message", "성공");
+        return res;
+    }
 }

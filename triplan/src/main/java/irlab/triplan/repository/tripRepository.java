@@ -23,4 +23,7 @@ public interface tripRepository extends JpaRepository<trip, Integer> {
 
     @Query(nativeQuery = true, value = "insert into tripuser(trip_id, user_id) value(:trip_id, :user_id);")
     void insertMember(Integer trip_id, Integer user_id);
+
+    @Query(nativeQuery = true, value = "delete from tripuser where trip_id = :trip_id and user_id = :user_id")
+    void deleteMember(Integer trip_id, Integer user_id);
 }

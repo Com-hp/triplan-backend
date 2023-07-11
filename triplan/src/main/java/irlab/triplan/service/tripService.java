@@ -12,4 +12,5 @@ public interface tripService {
     Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path);
     Map<String, Object> getTripMember(Integer trip_id);
     Map<String, Object> insertMember(Integer trip_id, Integer user_id);
+    Map<String, Object> deleteMember(Integer trip_id, Integer user_id);
 }

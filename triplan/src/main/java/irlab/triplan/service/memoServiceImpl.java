@@ -31,13 +31,13 @@ public class memoServiceImpl implements memoService{
 
     @Override
     @Transactional
-    public Map<String, Object> getClass(Integer trip_id) {
+    public Map<String, Object> getClass(Integer trip_id, Integer user_id) {
         Map<String ,Object> res = new HashMap<>();
         if(trip_id == null){
             res.put("Message","req 확인");
             return res;
         }
-        List<Map<String,Object>> tmp = memorepository.getClass(trip_id);
+        List<Map<String,Object>> tmp = memorepository.getClass(trip_id, user_id);
         res.put("Message", "성공");
         res.put("Data", tmp);
         return res;

@@ -12,10 +12,10 @@ import java.util.Map;
 
 @Repository
 public interface memoRepository extends JpaRepository<memo, Integer> {
-    @Query(nativeQuery = true, value = "select c.trip_id, c.classification_id, c.user_id, u.user_name, c.content, c.image_path, c.content_datetime, c.is_url, c.like_count, c.category from classification c " +
-            "inner join `user` u on u.user_id = c.user_id " +
+    @Query(nativeQuery = true, value = "select c.trip_id, c.classification_id, c.user_id, u.user_name, c.content, c.image_path, c.content_datetime, c.is_url, c.like_count, c.category,IF(l.user_id = :user_id, 1, 0) as is_like from classification c " +
+            "inner join `user` u on u.user_id = c.user_id LEFT JOIN `like` l on (c.classification_id = l.classification_id and l.user_id= :user_id)" +
             "where c.trip_id = :trip_id")
-    List<Map<String, Object>> getClass(Integer trip_id);
+    List<Map<String, Object>> getClass(Integer trip_id, Integer user_id);
     @Query(nativeQuery = true, value = "select user_id, image_path, is_url from `classification` where classification_id = :classification_id")
     Map<String, Object> preprocessing(Integer classification_id);
     @Query(nativeQuery = true, value = "insert into `classification` (trip_id, category, user_id, content, image_path, content_datetime, is_url, like_count) values (:trip_id, :category, :user_id, :content, :image_path, now(), 1, 0)")

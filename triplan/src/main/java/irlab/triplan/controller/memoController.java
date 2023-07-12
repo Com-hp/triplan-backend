@@ -21,8 +21,8 @@ public class memoController {
     private final memoService memoservice;
 
     @GetMapping
-    public Map<String, Object> getClass(@RequestParam(name = "trip_id") Integer trip_id){
-        return memoservice.getClass(trip_id);
+    public Map<String, Object> getClass(Integer trip_id, Integer user_id){
+        return memoservice.getClass(trip_id, user_id);
     }
 
     @PostMapping(value = "/memo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

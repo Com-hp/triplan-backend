@@ -38,4 +38,6 @@ public interface memoRepository extends JpaRepository<memo, Integer> {
     void createLike(Integer classification_id, Integer user_id);
     @Query(nativeQuery = true, value = "delete from `like` where classification_id = :classification_id and user_id = :user_id")
     void deleteLike(Integer classification_id, Integer user_id);
+    @Query(nativeQuery = true, value = "update `classification` set like_count = like_count + :value where classification_Id = :classification_id")
+    void updateLikeCnt(Integer classification_id, Integer value);
 }

@@ -193,6 +193,7 @@ public class memoServiceImpl implements memoService{
             return res;
         }
         memorepository.createLike(classification_id, user_id);
+        memorepository.updateLikeCnt(classification_id, 1);
         res.put("Message", "성공");
         return res;
     }
@@ -209,6 +210,7 @@ public class memoServiceImpl implements memoService{
             return res;
         }
         memorepository.deleteLike(classification_id, user_id);
+        memorepository.updateLikeCnt(classification_id, -1);
         res.put("Message", "성공");
         return res;
     }

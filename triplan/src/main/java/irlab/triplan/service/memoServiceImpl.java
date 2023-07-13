@@ -1,8 +1,6 @@
 package irlab.triplan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import irlab.triplan.DTO.memoDTO;
-import irlab.triplan.entity.memo;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +35,9 @@ public class memoServiceImpl implements memoService{
             return res;
         }
         List<Map<String,Object>> tmp = memorepository.getClass(trip_id, user_id);
+        tmp.forEach(s -> {
+            s.put("image_path","/images/resources/memo/"+s.get("image_path"));
+        });
         res.put("Message", "성공");
         res.put("Data", tmp);
         return res;
@@ -141,7 +141,7 @@ public class memoServiceImpl implements memoService{
                     }
                 }
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
-                File f = new File(URLDecoder.decode("resources"+pre_path, StandardCharsets.UTF_8));
+                File f = new File(URLDecoder.decode(pre_path.substring(7), StandardCharsets.UTF_8));
                 memorepository.editMemo(classification_id, category, content, newFilename);
                 f.delete();
             } catch (IOException e) {

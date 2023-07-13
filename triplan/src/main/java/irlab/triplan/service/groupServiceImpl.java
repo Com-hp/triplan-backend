@@ -24,7 +24,7 @@ public class groupServiceImpl implements groupService{
     private final groupReporitory grouprepository;
     private final groupUserRepository groupuserrepository;
     private final Path path = Path.of("resources/group");
-    private final Path oldpath = Path.of("resources");
+    private final Path oldpath = Path.of("/images/resources/group");
     @Override
     public List<group> readGroup(){
         return grouprepository.findAll();
@@ -48,12 +48,10 @@ public class groupServiceImpl implements groupService{
         }
         group_pw = group_pw.replaceAll("\"","");
         if(!Pattern.compile("^[0-9a-zA-Z]*").matcher(group_pw).find()){
-            System.out.println(group_pw);
             res.put("Message", "group_pw에 미허용 글자가 포함되어 있습니다.");
             return res;
         }
         else if(group_pw.length() != 4){
-            System.out.println(group_pw.length());
             res.put("Message","group_pw가 4자리가 아닙니다.");
             return res;
         }
@@ -61,7 +59,6 @@ public class groupServiceImpl implements groupService{
             res.put("Message", "이미지 파일이 아닙니다.");
             return res;
         }
-
         //group_code 설정
         String group_code;
         boolean is;
@@ -73,7 +70,6 @@ public class groupServiceImpl implements groupService{
             long b = code_list.stream().distinct().count();
             is = a == b;
         }while(is);
-
         //파일 업로드
         String newFilename;
         if(group_path.isEmpty()){
@@ -81,6 +77,7 @@ public class groupServiceImpl implements groupService{
         }
         else{
             newFilename = "group" + System.nanoTime() + (group_path.getOriginalFilename().substring(group_path.getOriginalFilename().lastIndexOf(".")));
+            //해당 경로가 없을 경우에는 경로대로 폴더 생성
             if(!Files.exists(path)){
                 try {
                     Files.createDirectories(path);
@@ -88,17 +85,18 @@ public class groupServiceImpl implements groupService{
                     throw new RuntimeException(e);
                 }
             }
-            try (InputStream inputStream = group_path.getInputStream()) {
-                Path imagePath = Path.of(getClass().getResource(String.valueOf(path)).toURI()).resolve(newFilename);
-                try (OutputStream outputStream = new FileOutputStream(imagePath.toFile())) {
-                    StreamUtils.copy(inputStream, outputStream);
+            newFilename = "memo" + System.nanoTime() + (group_path.getOriginalFilename().substring(group_path.getOriginalFilename().lastIndexOf('.')));
+            if(!Files.exists(path)){
+                try {
+                    Files.createDirectories(path);
                 } catch (IOException e) {
-                    res.put("Message", "이미지 파일 업로드에 실패했습니다.");
-                    return res;
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                res.put("Message", "이미지 파일 업로드에 실패했습니다.");
-                return res;
+            }
+            try {
+                Files.copy(group_path.getInputStream(), path.resolve(newFilename));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -169,7 +167,7 @@ public class groupServiceImpl implements groupService{
             return res;
         }
         String newFilename = "group" + System.nanoTime() + (file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-        String oldFilename = oldpath +"/"+pre_file; //
+        String oldFilename = oldpath +"/"+pre_file;
         try{
             Files.copy(file.getInputStream(), path.resolve(newFilename));
             File f = new File(URLDecoder.decode(oldFilename, "UTF-8"));
@@ -188,7 +186,6 @@ public class groupServiceImpl implements groupService{
             System.out.println("비었음");
             res.put("Message", "group_id가 비었다.");
         }
-//        member.forEach(s -> System.out.println(s.get("user_id")));
         res.put("Message","성공");
         res.put("Data", member);
         return res;

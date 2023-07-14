@@ -19,6 +19,6 @@ public class groupDTO {
     private String group_path;
 
     public static groupDTO toDto(group g) {
-        return new groupDTO(g.getGroup_id(), g.getGroup_name(), g.getGroup_code(), g.getGroup_pw(), ("/group/"+g.getGroup_path()));
+        return new groupDTO(g.getGroup_id(), g.getGroup_name(), g.getGroup_code(), g.getGroup_pw(), ("/images/resources/group/"+g.getGroup_path()));
     }
 }

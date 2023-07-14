@@ -18,6 +18,6 @@ public class tripDTO {
     private LocalDate end_date;
 
     public static tripDTO toDto(trip t){
-        return new tripDTO(t.getT_id(),t.getT_name(), t.getT_path(), t.getS_date(), t.getE_date());
+        return new tripDTO(t.getT_id(),t.getT_name(), ("/images/resources/group/"+t.getT_path()), t.getS_date(), t.getE_date());
     }
 }

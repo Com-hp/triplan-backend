@@ -207,6 +207,7 @@ public class groupServiceImpl implements groupService{
             res.put("Message","이미 가입된 user_id 입니다.");
             return res;
         }
+        group_pw = group_pw.replaceAll("\"","");
         if(!check.get("group_pw").equals(group_pw)){
             res.put("Message", "비밀번호가 동일하지 않습니다.");
             return res;

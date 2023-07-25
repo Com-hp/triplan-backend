@@ -32,6 +32,7 @@ public class tripController {
             res.put("Message","해당하는 trip이 없습니다.");
             return res;
         }
+        res.put("Message", "성공");
         res.put("Data", td);
         return res;
     }
@@ -47,8 +48,9 @@ public class tripController {
         for(int i = 0; i < gt.size(); i++){
             List<tripDTO> t = tripservice.getGroupDate(gt.get(i).getGroup_id());
             list.add(t);
-            System.out.println(list.get(i));
+//            System.out.println(list.get(i));
         }
+        res.put("Message", "성공");
         res.put("Data", list);
         return res;
     }

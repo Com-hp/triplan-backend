@@ -48,6 +48,7 @@ public class memoServiceImpl implements memoService{
 
     @Override
     public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String url) {
+        Map<String ,Object> res = new HashMap<>();
         try {
             ObjectMapper mapper = new ObjectMapper();
             URL tmp = new URL("http://localhost:5000/"+url);
@@ -67,9 +68,9 @@ public class memoServiceImpl implements memoService{
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            res.put("Message","분류불가 url");
+            return res;
         }
-        Map<String ,Object> res = new HashMap<>();
         res.put("Message", "성공");
         return res;
     }
@@ -81,7 +82,6 @@ public class memoServiceImpl implements memoService{
             res.put("Message","req 확인");
             return res;
         }
-
         if((content != null || content != "")&& image_path.isEmpty()){//content만 등록할 때
             memorepository.createMemo_only_content(trip_id,user_id,content,category);
         }
@@ -99,6 +99,7 @@ public class memoServiceImpl implements memoService{
                 }
             }
             try {
+                System.out.println("666666");
                 Files.copy(image_path.getInputStream(), path.resolve(newFilename));
             } catch (IOException e) {
                 throw new RuntimeException(e);

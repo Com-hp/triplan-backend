@@ -32,13 +32,13 @@ public class userController {
         return res;
     }
 
-    @DeleteMapping("/withdraw")
+    @DeleteMapping(value = "/withdraw", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> deleteUser(Integer user_id){
         Map<String, Object> res = userservice.deleteUser(user_id);
         return res;
     }
 
-    @PutMapping("/change")
+    @PutMapping(value = "/change", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> changeImg(Integer user_id, String user_name, Integer image_id){
         Map<String, Object> res = userservice.changeImg(user_id, user_name, image_id);
         return res;

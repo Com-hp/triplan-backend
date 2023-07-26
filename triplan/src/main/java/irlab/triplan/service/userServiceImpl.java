@@ -18,7 +18,7 @@ public class userServiceImpl implements userService{
     @Override
     public Map<String, Object> CreateUser(String user_name, String access_token, Integer default_path) {
         Map<String, Object> res = new HashMap<>();
-        if(user_name == "" | user_name.isEmpty() | access_token == "" | access_token.isEmpty() | default_path == null){
+        if(user_name == "" || user_name.isEmpty() || access_token == "" || access_token.isEmpty() || default_path == null){
             res.put("Message","req 확인");
         }
         userrepository.CreateUser(user_name, access_token, default_path);

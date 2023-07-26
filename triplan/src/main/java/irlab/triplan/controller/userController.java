@@ -21,25 +21,14 @@ public class userController {
     private final userService userservice;
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> CreateUser(String user_name, String access_token, Integer default_id){
-        System.out.println("-------------");
-        System.out.println(user_name+" "+access_token+" "+default_id);
-        userservice.CreateUser(user_name, access_token, default_id);
-        Map<String, Object> res = new HashMap<>();
-        res.put("Message", "DB 확인 필요"); //이거어는 왜 여기에 있죠?
+        Map<String, Object> res = userservice.CreateUser(user_name, access_token, default_id);
         return res;
     }
     
     @GetMapping("/login")
     @Transactional
     public Map<String, Object> login(@RequestParam(name="access_token")String access_token){
-        Integer cnt = userservice.countUser(access_token);
-        Map<String, Object> res = new HashMap<>();
-        if(cnt == 0){
-            res.put("Message", "is_new");
-        }
-        else{
-            res = userservice.findByAccessToken(access_token);
-        }
+        Map<String, Object> res = userservice.findByAccessToken(access_token);
         return res;
     }
 

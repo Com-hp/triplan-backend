@@ -16,15 +16,27 @@ public class userServiceImpl implements userService{
     private final userRepository userrepository;
 
     @Override
-    public void CreateUser(String user_name, String access_token, Integer default_path) {
+    public Map<String, Object> CreateUser(String user_name, String access_token, Integer default_path) {
+        Map<String, Object> res = new HashMap<>();
+        if(user_name == "" | user_name.isEmpty() | access_token == "" | access_token.isEmpty() | default_path == null){
+            res.put("Message","req 확인");
+        }
         userrepository.CreateUser(user_name, access_token, default_path);
+        res.put("Message","성공");
+        return res;
     }
 
     @Override
     public Map<String, Object> findByAccessToken(String access_token) {
+        Map<String, Object> res = new HashMap<>();
+        Integer existsUser = countUser(access_token);
+        if(existsUser == 0){
+            res.put("Message", "is_new");
+            return res;
+        }
         user u = userrepository.findByAccessToken(access_token);
         userDTO uD = userDTO.toDto(u);
-        Map<String, Object> res = userDTO.res(u, userDefaultDTO.toDto(uD.getDefault_id()));
+        res = userDTO.res(u, userDefaultDTO.toDto(uD.getDefault_id()));
         Integer cnt = userrepository.countEndTrip(u.getUser_id());
         res.put("trip_cnt", cnt);
         return res;

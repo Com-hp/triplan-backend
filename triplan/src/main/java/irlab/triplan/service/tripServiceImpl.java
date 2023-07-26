@@ -13,6 +13,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,7 +103,7 @@ public class tripServiceImpl implements tripService{
     }
 
     @Override
-    public Map<String, Object> editTrip(Integer trip_id, String trip_name, LocalDateTime start_date, LocalDateTime end_date, MultipartFile trip_path, String pre_path){
+    public Map<String, Object> editTrip(Integer trip_id, String trip_name, LocalDate start_date, LocalDate end_date, MultipartFile trip_path, String pre_path){
         Map<String, Object> res = new HashMap<>();
         res.put("Message", "성공");
         if(trip_id == null || pre_path.equals("")){

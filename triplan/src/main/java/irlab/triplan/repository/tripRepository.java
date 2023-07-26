@@ -5,6 +5,7 @@ import irlab.triplan.entity.trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -29,5 +30,5 @@ public interface tripRepository extends JpaRepository<trip, Integer> {
     void deleteMember(Integer trip_id, Integer user_id);
 
     @Query(nativeQuery = true, value = "update trip set trip_name = :trip_name, start_date = :start_date, end_date =:end_date, trip_path = :newFilename where trip_id = :trip_id")
-    void editTrip(Integer trip_id, String trip_name, LocalDateTime start_date, LocalDateTime end_date, String newFilename);
+    void editTrip(Integer trip_id, String trip_name, LocalDate start_date, LocalDate end_date, String newFilename);
 }

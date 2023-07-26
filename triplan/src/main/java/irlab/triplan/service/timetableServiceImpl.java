@@ -21,19 +21,20 @@ public class timetableServiceImpl implements timetableService{
     @Override
     public Map<String,Object> getTimetable(Integer trip_id, Integer type) {
         Map<String, Object> res = new HashMap<>();
-        List<timetable> t;
+        List<timetable> t = null;
         if (trip_id != null && type == 0){
             t = tRepository.getAllTimetable(trip_id);
         } else if (trip_id != null && type == 1) {
             Map<String, Object> schedule = tRepository.findTrip(trip_id);
-            t = tRepository.getTimetable(trip_id, Timestamp.valueOf(schedule.get("start_date").toString()+" 00:00:00"), Timestamp.valueOf(schedule.get("end_date").toString()+" 23:59:59"));
+            if(!schedule.isEmpty())
+                t = tRepository.getTimetable(trip_id, Timestamp.valueOf(schedule.get("start_date").toString()+" 00:00:00"), Timestamp.valueOf(schedule.get("end_date").toString()+" 23:59:59"));
         }
         else{
             res.put("Message","req 확인");
             return res;
         }
         List<timetableDTO> data = new ArrayList<>();
-        t.forEach(s -> data.add(timetableDTO.toDto(s)));
+        if(t != null) t.forEach(s -> data.add(timetableDTO.toDto(s)));
         res.put("Message","성공");
         res.put("Data",data);
         return res;

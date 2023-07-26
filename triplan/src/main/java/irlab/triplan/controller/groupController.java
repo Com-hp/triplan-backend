@@ -26,8 +26,12 @@ public class groupController {
     }
 
     @GetMapping("")
-    public List<groupDTO> getGroup(@RequestParam(name="user_id") Integer user_id){
-        return groupservice.getGroup(user_id);
+    public Map<String, Object> getGroup(@RequestParam(name="user_id") Integer user_id){
+        Map<String, Object> res = new HashMap<>();
+        List<groupDTO> g = groupservice.getGroup(user_id);
+        res.put("Message", "성공");
+        res.put("Data", g);
+        return res;
     }
 
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

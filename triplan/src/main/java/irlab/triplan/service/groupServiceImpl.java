@@ -85,7 +85,6 @@ public class groupServiceImpl implements groupService{
                     throw new RuntimeException(e);
                 }
             }
-            newFilename = "memo" + System.nanoTime() + (group_path.getOriginalFilename().substring(group_path.getOriginalFilename().lastIndexOf('.')));
             if(!Files.exists(path)){
                 try {
                     Files.createDirectories(path);
@@ -170,7 +169,7 @@ public class groupServiceImpl implements groupService{
         String oldFilename = oldpath +"/"+pre_file;
         try{
             Files.copy(file.getInputStream(), path.resolve(newFilename));
-            File f = new File(URLDecoder.decode(oldFilename, "UTF-8"));
+            File f = new File(URLDecoder.decode(pre_file.substring(7), StandardCharsets.UTF_8));
             f.delete();
         }catch(IOException e){
             throw new RuntimeException(e);
@@ -208,6 +207,7 @@ public class groupServiceImpl implements groupService{
             res.put("Message","이미 가입된 user_id 입니다.");
             return res;
         }
+        group_pw = group_pw.replaceAll("\"","");
         if(!check.get("group_pw").equals(group_pw)){
             res.put("Message", "비밀번호가 동일하지 않습니다.");
             return res;

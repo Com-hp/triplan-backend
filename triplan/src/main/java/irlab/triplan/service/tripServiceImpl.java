@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class tripServiceImpl implements tripService{
     private final tripRepository triprepository;
-    private final Path path = Path.of("src/main/resources/static/trip");
+    private final Path path = Path.of("resources/trip");
 
     @Override
     public List<tripDTO> getGroupInTrip(Integer group_id){
@@ -98,6 +98,29 @@ public class tripServiceImpl implements tripService{
         }
         triprepository.insertMember(trip_id, user_id);
         res.put("Message","성공");
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> editTrip(Integer trip_id, String trip_name, LocalDateTime start_date, LocalDateTime end_date, MultipartFile trip_path, String pre_path){
+        Map<String, Object> res = new HashMap<>();
+        res.put("Message", "성공");
+        if(trip_id == null || pre_path.equals("")){
+            res.put("Message", "trip_id와 pre_path 값을 확인해주세요");
+            return res;
+        }
+        String newFilename = "trip" + System.nanoTime() + (trip_path.getOriginalFilename().substring(trip_path.getOriginalFilename().lastIndexOf(".")));
+        String oldFilename = pre_path;
+        //파일 받을 때 images 붙여서 오기 때문에 앞에 삭제 필요?
+        try{
+            Files.copy(trip_path.getInputStream(), path.resolve(newFilename));
+            File f = new File(URLDecoder.decode(pre_path.substring(7), StandardCharsets.UTF_8));
+            f.delete();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+
+        triprepository.editTrip(trip_id, trip_name, start_date, end_date, newFilename);
         return res;
     }
 

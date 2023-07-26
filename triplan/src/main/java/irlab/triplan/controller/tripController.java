@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InterruptedIOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -31,6 +32,7 @@ public class tripController {
             res.put("Message","해당하는 trip이 없습니다.");
             return res;
         }
+        res.put("Message", "성공");
         res.put("Data", td);
         return res;
     }
@@ -46,8 +48,9 @@ public class tripController {
         for(int i = 0; i < gt.size(); i++){
             List<tripDTO> t = tripservice.getGroupDate(gt.get(i).getGroup_id());
             list.add(t);
-            System.out.println(list.get(i));
+//            System.out.println(list.get(i));
         }
+        res.put("Message", "성공");
         res.put("Data", list);
         return res;
     }
@@ -67,6 +70,12 @@ public class tripController {
     @PostMapping(value = "/member/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> insertMember(Integer trip_id, Integer user_id){
         Map<String, Object> res = tripservice.insertMember(trip_id, user_id);
+        return res;
+    }
+
+    @PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> editTrip(Integer trip_id, String trip_name, LocalDateTime start_date, LocalDateTime end_date, MultipartFile trip_path, String pre_path){
+        Map<String, Object> res = tripservice.editTrip(trip_id, trip_name, start_date, end_date, trip_path, pre_path);
         return res;
     }
 

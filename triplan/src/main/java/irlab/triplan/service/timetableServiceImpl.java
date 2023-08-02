@@ -47,6 +47,7 @@ public class timetableServiceImpl implements timetableService{
             res.put("Message","req 확인");
             return res;
         }
+        if (memo == null) memo = "";
         tRepository.createTimetable(trip_id, title, memo, Timestamp.valueOf(start_date), Timestamp.valueOf(end_date));
         res.put("Message","성공");
         return res;

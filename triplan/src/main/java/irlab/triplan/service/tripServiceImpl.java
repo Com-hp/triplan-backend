@@ -27,14 +27,16 @@ public class tripServiceImpl implements tripService{
     private final Path path = Path.of("resources/trip");
 
     @Override
-    public List<tripDTO> getGroupInTrip(Integer group_id){
+    public Map<String, Object> getGroupInTrip(Integer group_id){
+        Map<String, Object> res = new HashMap<>();
         if(group_id == null){
-            return null;
+            res.put("Message","해당하는 trip이 없습니다.");
+            return res;
         }
-        List<trip> t = triprepository.findGroupInTrip(group_id);
-        List<tripDTO> td = new ArrayList<>();
-        t.forEach(s -> td.add(tripDTO.toDto(s)));
-        return td;
+        List<Map<String, Object>> t = triprepository.findGroupInTrip(group_id);
+        res.put("Message" , "성공");
+        res.put("Data", t);
+        return res;
     }
 
     @Override
@@ -55,10 +57,10 @@ public class tripServiceImpl implements tripService{
     }
 
     @Override
-    public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path){
+    public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path, String trip_name, LocalDate start_date, LocalDate end_date){
         Map<String, Object> res = new HashMap<>();
-        if(group_id == null){
-            res.put("Message","group_id가 없습니다.");
+        if(group_id == null || trip_name.equals("") || start_date.equals("") || end_date.equals("")){
+            res.put("Message","null값이 존재합니다.");
             return res;
         }
         if(trip_path.isEmpty()){
@@ -86,7 +88,8 @@ public class tripServiceImpl implements tripService{
                 throw new RuntimeException(e);
             }
         }
-        triprepository.InsertTrip(group_id, newFilename);
+        trip_name = trip_name.replaceAll("\"","");
+        triprepository.InsertTrip(group_id, newFilename,trip_name,start_date,end_date);
         res.put("Message", "성공");
         return res;
     }

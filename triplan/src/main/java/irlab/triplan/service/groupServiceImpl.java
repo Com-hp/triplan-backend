@@ -46,6 +46,7 @@ public class groupServiceImpl implements groupService{
             res.put("Message", "null값이 존재합니다.");
             return res;
         }
+        group_name = group_name.replaceAll("\"","");
         group_pw = group_pw.replaceAll("\"","");
         if(!Pattern.compile("^[0-9a-zA-Z]*").matcher(group_pw).find()){
             res.put("Message", "group_pw에 미허용 글자가 포함되어 있습니다.");

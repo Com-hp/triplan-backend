@@ -27,14 +27,7 @@ public class tripController {
 
     @GetMapping("")
     public Map<String, Object> getTrip(@RequestParam(name = "group_id")Integer group_id){
-        List<tripDTO> td = tripservice.getGroupInTrip(group_id);
-        Map<String, Object> res = new HashMap<>();
-        if(td.isEmpty()){
-            res.put("Message","해당하는 trip이 없습니다.");
-            return res;
-        }
-        res.put("Message", "성공");
-        res.put("Data", td);
+        Map<String, Object> res = tripservice.getGroupInTrip(group_id);
         return res;
     }
 
@@ -63,8 +56,8 @@ public class tripController {
     }
 
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path){
-        Map<String, Object> res = tripservice.CreateTrip(group_id, trip_path);
+    public Map<String, Object> CreateTrip(Integer group_id, MultipartFile trip_path, String trip_name, LocalDate start_date, LocalDate end_date){
+        Map<String, Object> res = tripservice.CreateTrip(group_id, trip_path, trip_name, start_date, end_date);
         return res;
     }
 

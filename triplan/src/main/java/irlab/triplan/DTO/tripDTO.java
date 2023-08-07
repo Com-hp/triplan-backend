@@ -4,6 +4,7 @@ import irlab.triplan.entity.trip;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class tripDTO {
     private String start_date;
     private String end_date;
 
-    public static tripDTO toDto(trip t){
-        return new tripDTO(t.getT_id(),t.getT_name(), ("/images/resources/trip/"+t.getT_path()), t.getS_date().toString(), t.getE_date().toString());
+    public static tripDTO toDto(Map<String, Object> t){
+        return new tripDTO(Integer.parseInt(String.valueOf(t.get("trip_id"))), String.valueOf(t.get("trip_name")), ("/images/resources/trip/"+t.get("trip_path")), String.valueOf(t.get("start_date")), String.valueOf(t.get("end_date")));
     }
 }

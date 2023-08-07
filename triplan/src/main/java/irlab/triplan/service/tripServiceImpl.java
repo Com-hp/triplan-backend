@@ -34,14 +34,16 @@ public class tripServiceImpl implements tripService{
             return res;
         }
         List<Map<String, Object>> t = triprepository.findGroupInTrip(group_id);
+        List<tripDTO> td = new ArrayList<>();
+        t.forEach(s -> td.add(tripDTO.toDto(s)));
         res.put("Message" , "성공");
-        res.put("Data", t);
+        res.put("Data", td);
         return res;
     }
 
     @Override
     public List<tripDTO> getGroupDate(Integer group_id){
-        List<trip> t = triprepository.findGroupDate(group_id);
+        List<Map<String, Object>> t = triprepository.findGroupDate(group_id);
         List<tripDTO> td = new ArrayList<>();
         t.forEach(s -> td.add(tripDTO.toDto(s)));
         return td;

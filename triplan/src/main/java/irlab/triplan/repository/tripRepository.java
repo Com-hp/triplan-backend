@@ -16,7 +16,7 @@ public interface tripRepository extends JpaRepository<trip, Integer> {
     List<Map<String, Object>> findGroupInTrip(Integer group_id);
 
     @Query(nativeQuery = true, value = "select * from trip t where t.group_id = :group_id and NOW() < end_date;")
-    List<trip> findGroupDate(Integer group_id);
+    List<Map<String, Object>> findGroupDate(Integer group_id);
 
     @Query(nativeQuery = true, value = "select u.user_id, u.user_name, u.default_id from `user` u join tripuser t on t.user_id = u.user_id where t.trip_id = :trip_id")
     List<Map<String, Object>> findByMember(Integer trip_id);

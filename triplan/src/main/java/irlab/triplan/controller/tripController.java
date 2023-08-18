@@ -42,7 +42,6 @@ public class tripController {
         for(int i = 0; i < gt.size(); i++){
             List<tripDTO> t = tripservice.getGroupDate(gt.get(i).getGroup_id());
             list.add(t);
-//            System.out.println(list.get(i));
         }
         res.put("Message", "성공");
         res.put("Data", list);

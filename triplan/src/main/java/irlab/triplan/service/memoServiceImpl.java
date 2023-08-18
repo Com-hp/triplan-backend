@@ -1,19 +1,22 @@
 package irlab.triplan.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import irlab.triplan.DTO.memoDTO;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.net.HttpURLConnection;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +30,10 @@ import java.util.Map;
 public class memoServiceImpl implements memoService{
     private final memoRepository memorepository;
     private final Path path = Path.of("resources/memo");
+
+    private final String tmp = "http://localhost:5000/URL";
+
+    private RestTemplate restTemplate;
 
     @Override
     @Transactional
@@ -50,26 +57,19 @@ public class memoServiceImpl implements memoService{
     public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String url) {
         Map<String ,Object> res = new HashMap<>();
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            URL tmp = new URL("http://localhost:5000/"+url);
-            HttpURLConnection conn = (HttpURLConnection) tmp.openConnection();
-            Charset charset = StandardCharsets.UTF_8;
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
 
-            String inputLine;
-            StringBuffer sb = new StringBuffer();
-            while ((inputLine = br.readLine()) != null) {
-                sb.append(inputLine);
-            }
-            br.close();
-            Map<String, String> result = mapper.readValue(sb.toString(), Map.class);
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("url", url);
 
-            memorepository.classificationURL(trip_id, result.get("category"),user_id,url,result.get("image_url"));
-        } catch (MalformedURLException e) {
+            HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, headers);
+            ResponseEntity<String> tmp_res = restTemplate.postForEntity(tmp, req, String.class);
+            JSONParser parser = new JSONParser(tmp_res.getBody());
+            Map<String, Object> result = (Map<String, Object>) parser.parse();
+            memorepository.classificationURL(trip_id, (String) result.get("category"),user_id,url, (String) result.get("image_url"));
+        } catch (ParseException e) {
             throw new RuntimeException(e);
-        } catch (IOException e) {
-            res.put("Message","분류불가 url");
-            return res;
         }
         res.put("Message", "성공");
         return res;

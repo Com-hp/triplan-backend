@@ -15,7 +15,7 @@ public interface tripRepository extends JpaRepository<trip, Integer> {
     @Query(nativeQuery = true, value = "select t.trip_id, t.trip_name, t.trip_path, DATE_FORMAT(t.start_date,'%Y.%m.%d.') as start_date, DATE_FORMAT(t.end_date,'%Y.%m.%d.') as end_date from trip t where t.group_id = :group_id ORDER BY trip_id DESC")
     List<Map<String, Object>> findGroupInTrip(Integer group_id);
 
-    @Query(nativeQuery = true, value = "select * from trip t where t.group_id = :group_id and NOW() < end_date;")
+    @Query(nativeQuery = true, value = "select t.trip_id, t.trip_name, t.trip_path, DATE_FORMAT(t.start_date,'%Y.%m.%d.') as start_date, DATE_FORMAT(t.end_date,'%Y.%m.%d.') as end_date from trip t where t.group_id = :group_id and NOW() < end_date;")
     List<Map<String, Object>> findGroupDate(Integer group_id);
 
     @Query(nativeQuery = true, value = "select u.user_id, u.user_name, u.default_id from `user` u join tripuser t on t.user_id = u.user_id where t.trip_id = :trip_id")

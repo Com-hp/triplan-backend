@@ -32,6 +32,7 @@ public class memoController {
 
     @PostMapping(value = "/url", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String content){
+        System.out.println(content);
         return memoservice.classificationURL(trip_id, user_id, content);
     }
 

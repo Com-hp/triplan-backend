@@ -1,5 +1,7 @@
 package irlab.triplan.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import irlab.triplan.DTO.memoDTO;
 import irlab.triplan.repository.memoRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +33,6 @@ public class memoServiceImpl implements memoService{
     private final memoRepository memorepository;
     private final Path path = Path.of("resources/memo");
 
-    private final String tmp = "http://localhost:5000/URL";
-
-    private RestTemplate restTemplate;
-
     @Override
     @Transactional
     public Map<String, Object> getClass(Integer trip_id, Integer user_id) {
@@ -54,23 +52,32 @@ public class memoServiceImpl implements memoService{
     }
 
     @Override
-    public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String url) {
+    public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String url) throws JsonProcessingException {
         Map<String ,Object> res = new HashMap<>();
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, Object> result;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("url", url);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("url", url); // 원하는 파라미터를 추가
 
-            HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, headers);
-            ResponseEntity<String> tmp_res = restTemplate.postForEntity(tmp, req, String.class);
-            JSONParser parser = new JSONParser(tmp_res.getBody());
-            Map<String, Object> result = (Map<String, Object>) parser.parse();
-            memorepository.classificationURL(trip_id, (String) result.get("category"),user_id,url, (String) result.get("image_url"));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:5000/URL", // 외부 API의 URL
+                HttpMethod.POST,
+                request,
+                String.class
+        );
+        if (response.getStatusCode() == HttpStatus.OK) {
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            result = objectMapper.readValue(responseBody, Map.class);
+        } else {
+            res.put("Message","분류 실패");
+            return res;
         }
+        memorepository.classificationURL(trip_id, String.valueOf(result.get("category")),user_id,url, String.valueOf(result.get("image_url")));
         res.put("Message", "성공");
         return res;
     }

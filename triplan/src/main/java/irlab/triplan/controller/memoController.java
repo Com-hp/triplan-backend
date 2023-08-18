@@ -1,5 +1,6 @@
 package irlab.triplan.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import irlab.triplan.DTO.memoDTO;
 import irlab.triplan.service.memoService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class memoController {
     }
 
     @PostMapping(value = "/url", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String content){
+    public Map<String, Object> classificationURL(Integer trip_id, Integer user_id, String content) throws JsonProcessingException {
         System.out.println(content);
         return memoservice.classificationURL(trip_id, user_id, content);
     }
